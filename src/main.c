@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:30:52 by hetan             #+#    #+#             */
-/*   Updated: 2024/03/27 04:24:35 by hetan            ###   ########.fr       */
+/*   Updated: 2024/03/28 22:56:52 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,17 @@ void ft_putdetails(char *cmd)
     else
     {
         perror("getcwd() error");
-        free(cwd); // Free memory allocated for cwd
+        free(cwd);
         return ;
     }
     write(1, "$>", 2);
-    free(cwd); // Free memory allocated for cwd
+    free(cwd);
 }
 
 void ctrl_c(int sig)
 {
     write(1, "\n", 1);
-    ft_putdetails(NULL); // Print MINISHELL: **CURRENTDIR**
+    ft_putdetails(NULL);
 }
 
 void check_sig(char *cmd)
