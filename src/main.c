@@ -6,13 +6,13 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:30:52 by hetan             #+#    #+#             */
-/*   Updated: 2024/03/28 22:56:52 by hetan            ###   ########.fr       */
+/*   Updated: 2024/03/29 01:13:28 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_putdetails(char *cmd)
+void current_dir(void)
 {
     char *cwd;
     
@@ -21,9 +21,7 @@ void ft_putdetails(char *cmd)
         return ;
     write(1, "MINISHELL:", strlen("MINISHELL:"));
     if (getcwd(cwd, BUFFER_SIZE + 1) != NULL)
-    {
         write(1, cwd, strlen(cwd));
-    }
     else
     {
         perror("getcwd() error");
@@ -34,34 +32,33 @@ void ft_putdetails(char *cmd)
     free(cwd);
 }
 
-void ctrl_c(int sig)
-{
-    write(1, "\n", 1);
-    ft_putdetails(NULL);
-}
+// void ctrl_c(int sig)
+// {
+//     write(1, "\n", 1);
+//     current_dir(NULL);
+// }
 
-void check_sig(char *cmd)
-{
-    signal(SIGINT, ctrl_c);
-    signal(SIGQUIT, SIG_IGN);
-    return ;
-}
+// void check_sig(char *cmd)
+// {
+//     signal(SIGINT, ctrl_c);
+//     signal(SIGQUIT, SIG_IGN);
+//     return ;
+// }
 
 int main(void)
 {
     char *cmd;
     ssize_t len;
 
-    cmd = calloc(sizeof(*cmd), BUFFER_SIZE + 1);
-    len = 0;
-    check_sig(cmd);
+    cmd = malloc(sizeof(*cmd) * (BUFFER_SIZE + 1));
     if (!cmd)
         exit(1);
-
+    len = 0;
+    check_sig();
     len = 0;
     while (1)
     {
-        ft_putdetails(cmd);
+        current_dir();
         len = read(STDIN_FILENO, cmd, BUFFER_SIZE);
         if (len <= 0)
         {
@@ -69,6 +66,7 @@ int main(void)
             exit(0);
         }
         *(cmd + len) = '\0';
+        // shell_cmd(cmd);
     }
     exit(0);
 }

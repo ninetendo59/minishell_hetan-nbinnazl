@@ -1,0 +1,30 @@
+Done
+- minishell Core structure 
+- handling ctrl c, ctrl d, ctrl \
+- displaying current directory & minishell program name
+
+Planning
+- handle command input (valid)
+- handle error (input invalid)
+- handle valid command but invalid syntax
+- ls shell
+- cd shell
+- echo shell
+    --> -n flag
+- pwd shell
+- export shell
+- unset shell
+- env with no arg/options
+- exit shell (easy)
+- handle single quote prevent dollar sign to be interpreted
+- handle double quote prevent dollar sign to be interpreted
+- working history (up down key)
+- not interpret unclosed quotes or special characters which not required (bs and semicolon)
+- handle '<', '>', '<<' and '>>'
+- handle pipes '|'
+- Handle environment variables ($ followed by a sequence of characters) which should expand to their values
+- ensure no leaks when code
+
+if we able to complete all above then try to do bonus
+- handle double ampersand && and double pipe || with parenthesis for being priotised
+- handle wildcards '*' which should be working for current dir

@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:52:11 by hetan             #+#    #+#             */
-/*   Updated: 2024/03/27 04:02:29 by hetan            ###   ########.fr       */
+/*   Updated: 2024/03/29 01:16:09 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,20 @@
 #  define BUFFER_SIZE 1024
 # endif
 
+typedef struct s_meta
+{
+    char    *cmd;
+    char    *hist;
+    int     len_hist;
+    int     cap_hist;
+}   t_meta;
+
+
+void current_dir(void);
+
+void ctrl_c(int sig);
+
+void check_sig(void);
 
 
 #endif

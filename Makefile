@@ -1,19 +1,18 @@
 NAME	=	minishell
 CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
-HEADER 	=	-I inc/
-SRC		=	src/main.c \
-			util/util.c
-LIBRARY	= 	libft/libft.a
+HEADER 	=	inc
+SRC		=	src/main.c src/signalling.c
+# LIBRARY	= 	libft/libft.a
 OBJ 	=	$(SRC:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(LIBRARY)
-	$(CC) $(CFLAGS) $(HEADER) $(OBJ) $(LIBRARY) -o $@
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) -I $(HEADER) $(OBJ) -o $@
 
 $(OBJ): %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -I $(HEADER) -c $< -o $@
 
 clean:
 	rm -rf $(OBJ)
