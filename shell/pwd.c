@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signalling.c                                       :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/28 23:49:05 by hetan             #+#    #+#             */
-/*   Updated: 2024/04/01 04:52:35 by hetan            ###   ########.fr       */
+/*   Created: 2024/04/01 05:02:21 by hetan             #+#    #+#             */
+/*   Updated: 2024/04/01 05:05:34 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void check_sig(void)
+void	ft_pwd(void)
 {
-	signal(SIGINT, ctrl_c);
-	signal(SIGQUIT, SIG_IGN);
-	return ;
-}
+	char	*cwd;
 
-void ctrl_c(int sig)
-{
-	(void)sig;
-	write(1, "\n", 1);
-	curr_dir();
+	cwd = malloc(sizeof(*cwd) * (BUFFER_SIZE + 1));
+	if (!cwd)
+		return ;
+	if (getcwd(cwd, BUFFER_SIZE + 1) != NULL)
+			write(1, cwd, strlen(cwd));
+	else
+		perror("getcwd() error");
+	free(cwd);
 }
