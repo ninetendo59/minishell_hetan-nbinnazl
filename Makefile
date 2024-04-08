@@ -9,7 +9,7 @@ OBJ 	=	$(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) -I $(HEADER) $(OBJ) -o $@
+	$(CC) $(CFLAGS) -I $(HEADER) $(OBJ) -o $@ -lreadline
 
 $(OBJ): %.o: %.c
 	$(CC) $(CFLAGS) -I $(HEADER) -c $< -o $@

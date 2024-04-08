@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:30:52 by hetan             #+#    #+#             */
-/*   Updated: 2024/04/01 05:13:13 by hetan            ###   ########.fr       */
+/*   Updated: 2024/04/04 05:12:32 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	curr_dir(void)
 	else
 		perror("getcwd() error");
 	write(1, "$>", 2);
+	rl_redisplay();
 	free(cwd);
 }
 
@@ -67,34 +68,34 @@ void	curr_dir(void)
 void	ini_list(t_meta *dat)
 {
 	dat->cmd = malloc(sizeof(*dat->cmd) * (BUFFER_SIZE + 1));
-	dat->hist = malloc(sizeof(*dat->hist) + 1);
+	dat->dir = malloc(sizeof(*dat->dir) + 1);
 	dat->len = 0;
 }
 
-void    shell_cmd (t_meta *dat)
-{
-	if (strncmp(dat->cmd, "echo", ))
-}
+// void    shell_cmd (t_meta *dat)
+// {
+// 	if (strncmp(dat->cmd, "echo", ))
+// }
 
 int	main(void)
 {
 	t_meta	dat;
 
 	ini_list(&dat);
-	if (!dat.cmd || !dat.hist)
+	if (!dat.cmd || !dat.dir)
 		exit(1);
 	check_sig();
 	while (1)
 	{
 		curr_dir();
-		dat.len = read(STDIN_FILENO, dat.cmd, BUFFER_SIZE);
-		*(dat.cmd + dat.len - 1) = '\0';
-		if (dat.len <= 0 || !strcmp(dat.cmd, "exit"))
+		dat.cmd = readline("");
+		if (!dat.cmd || !strcmp(dat.cmd, "exit"))
 		{
 			// free_list(&dat);
 			exit(0);
 		}
-		shell_cmd(&dat);
+		add_history(dat.cmd);
+		// shell_cmd(&dat);
 		*dat.cmd = '\0';
 	}
 	exit(0);

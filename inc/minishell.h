@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:52:11 by hetan             #+#    #+#             */
-/*   Updated: 2024/04/01 05:22:32 by hetan            ###   ########.fr       */
+/*   Updated: 2024/04/04 05:11:34 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@
 #  define BUFFER_SIZE 1024
 # endif
 
-# ifndef EHCO || CD || PWD || EXP || UNS || ENV
-#  define ECHO "echo"
-#  define CD "cd"
-#  define PWD "pwd"
-#  define EXP "export"
-#  define UNS "unset"
-#  define ENV "env"
-# endif
+// # ifndef EHCO || CD || PWD || EXP || UNS || ENV
+// #  define ECHO "echo"
+// #  define CD "cd"
+// #  define PWD "pwd"
+// #  define EXP "export"
+// #  define UNS "unset"
+// #  define ENV "env"
+// # endif
 
 typedef struct s_command
 {
@@ -50,7 +50,7 @@ typedef struct s_command
 typedef struct s_meta
 {
 	char	*cmd;
-	char	**hist;
+	char	*dir;
 	ssize_t	len;
 }   t_meta;
 
