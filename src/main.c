@@ -33,7 +33,7 @@ void	curr_dir(void)
 	cwd = malloc(sizeof(*cwd) * (BUFFER_SIZE + 1));
 	if (!cwd)
 		return ;
-	write(1, "MINISHELL:", strlen("MINISHELL:"));
+	write(1, "\e[32mMINISHELL: \e[0m", strlen("\e[32mMINISHELL: \e[0m"));
 	if (getcwd(cwd, BUFFER_SIZE + 1) != NULL)
 	{
 		home = getenv("HOME");
