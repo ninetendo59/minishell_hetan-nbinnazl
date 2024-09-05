@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+t_sig	g_sig;
+
 void	disp_home(char *cwd, char *home)
 {
 	char	*display;
@@ -44,7 +46,7 @@ void	curr_dir(void)
 	}
 	else
 		perror("getcwd() error");
-	write(1, "$>", 2);
+	write(1, "$ >", 3);
 	rl_redisplay();
 	free(cwd);
 }
@@ -70,6 +72,8 @@ void	ini_list(t_meta *dat)
 	dat->cmd = malloc(sizeof(*dat->cmd) * (BUFFER_SIZE + 1));
 	dat->dir = malloc(sizeof(*dat->dir) + 1);
 	dat->len = 0;
+	dat->ret = 0;
+	dat->exit = 0;
 }
 
 // void    shell_cmd (t_meta *dat)
@@ -77,16 +81,21 @@ void	ini_list(t_meta *dat)
 // 	if (strncmp(dat->cmd, "echo", ))
 // }
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
 	t_meta	dat;
+	(void)argc;
+	(void)argv;
 
+	ft_init_signal();
 	ini_list(&dat);
+	ft_init_env(&dat, env);
+
 	if (!dat.cmd || !dat.dir)
 		exit(1);
-	check_sig();
-	while (1)
+	while (dat.exit == 0)
 	{
+		check_sig();
 		curr_dir();
 		dat.cmd = readline("");
 		if (!dat.cmd || !strcmp(dat.cmd, "exit"))
@@ -98,5 +107,6 @@ int	main(void)
 		// shell_cmd(&dat);
 		*dat.cmd = '\0';
 	}
-	exit(0);
+	ft_free_env(dat.env);
+	exit(dat.ret);
 }

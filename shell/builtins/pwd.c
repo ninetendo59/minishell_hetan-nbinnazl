@@ -12,16 +12,21 @@
 
 #include "minishell.h"
 
-void	ft_pwd(void)
+int	ft_b_pwd(void)
 {
 	char	*cwd;
 
 	cwd = malloc(sizeof(*cwd) * (BUFFER_SIZE + 1));
 	if (!cwd)
-		return ;
+		return (free(cwd), 1);
 	if (getcwd(cwd, BUFFER_SIZE + 1) != NULL)
-			write(1, cwd, strlen(cwd));
+	{
+		ft_putendl_fd(cwd, 1);
+		return (free(cwd), 0);
+	}
 	else
+	{
 		perror("getcwd() error");
-	free(cwd);
+		return (free(cwd), 1);
+	}
 }
