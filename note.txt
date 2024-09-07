@@ -20,6 +20,42 @@ Done by Nizar
 - pwd shell
 - unset shell
 
+___________________________________________________________________
+Suggestion & reminder:
+#include <sys/wait.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <unistd.h>
+#include <limits.h>
+#if defined(__APPLE__) && defined (__MACH__)
+# include <sys/syslimits.h>
+#elif defined(__linux__)
+# include <linux/limits.h>
+#endif
+
+
+int main()
+{
+	char *input;
+	char *cwd;
+
+	printf("%llu", PATH_MAX);
+	while (1)
+	{
+		getcwd(cwd, PATH_MAX);
+		printf("MINISHELL >");
+		input = readline(cwd);
+		add_history(input);
+	}
+	
+}
+
+____________________________________________________________________________
+
 Planning
 - handle command input (valid)
 - handle error (input invalid)

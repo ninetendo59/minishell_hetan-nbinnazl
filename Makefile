@@ -2,8 +2,11 @@ NAME	=	minishell
 CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
 HEADER 	=	inc
-SRC		=	src/main.c src/signalling.c
-# LIBRARY	= 	libft/libft.a
+SRC		=	src/main.c src/signalling.c	src/rd_cmd.c\
+			shell/builtins/cd.c shell/builtins/echo.c shell/builtins/env.c shell/builtins/exit.c shell/builtins/export.c shell/builtins/pwd.c shell/builtins/unset.c	\
+			shell/builtins/env.c shell/env/sort.c	\
+
+# LIBRARY	= 	libft/libft.a 
 OBJ 	=	$(SRC:.c=.o)
 
 all: $(NAME)

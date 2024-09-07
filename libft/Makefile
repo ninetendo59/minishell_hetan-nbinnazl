@@ -6,7 +6,7 @@
 #    By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/02 23:26:27 by hetan             #+#    #+#              #
-#    Updated: 2024/05/03 01:20:59 by hetan            ###   ########.fr        #
+#    Updated: 2024/09/08 06:23:41 by hetan            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SOURCE = ft_isascii.c ft_putchar_fd.c ft_strdup.c ft_strmapi.c ft_tolower.c		\
 			ft_memset.c ft_strchr.c ft_strlen.c	ft_substr.c						\
 			ft_lstadd_back.c ft_lstadd_front.c ft_lstdelone.c ft_lstiter.c		\
 			ft_lstlast.c ft_lstmap.c ft_lstnew.c ft_lstsize.c ft_lstclear.c		\
+			ft_strcmp.c															\
 			$(PRINTF_DIRS)ft_printf.c $(PRINTF_DIRS)ft_printf_util.c			\
 			$(PRINTF_DIRS)specifier_util.c $(PRINTF_DIRS)specifier_flags.c		\
 			$(PRINTF_DIRS)convert_flags.c $(PRINTF_DIRS)convert_length.c		\

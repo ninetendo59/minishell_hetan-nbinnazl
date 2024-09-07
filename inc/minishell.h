@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:52:11 by hetan             #+#    #+#             */
-/*   Updated: 2024/04/04 05:11:34 by hetan            ###   ########.fr       */
+/*   Updated: 2024/09/08 06:06:56 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,13 @@
 # include <curses.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "libft.h"
+# if defined(__APPLE__) && defined (__MACH__)
+#  include <sys/syslimits.h>
+# elif defined(__linux__)
+#  include <linux/limits.h>
+#endif
+
 
 /* ************************************************************************** */
 /*     Constant declaration.                                                  */
