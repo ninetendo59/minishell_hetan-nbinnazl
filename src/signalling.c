@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 23:49:05 by hetan             #+#    #+#             */
-/*   Updated: 2024/09/08 06:10:25 by hetan            ###   ########.fr       */
+/*   Updated: 2024/09/08 14:11:50 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	check_sig(void)
 void	ctrl_c(int sig)
 {
 	(void)sig;
+	write(1, "\n", 1);
+	curr_dir();
 }
 
 void	ft_init_signal(void)
