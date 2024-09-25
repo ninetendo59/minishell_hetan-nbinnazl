@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:30:52 by hetan             #+#    #+#             */
-/*   Updated: 2024/09/08 06:12:20 by hetan            ###   ########.fr       */
+/*   Updated: 2024/09/26 06:35:28 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,14 @@ void	ini_list(t_meta *dat)
 int	main(int argc, char **argv, char **env)
 {
 	t_meta	dat;
+	static char	*last_cmd;
 	(void)argc;
 	(void)argv;
 
 	ft_init_signal();
 	ini_list(&dat);
 	ft_init_env(&dat, env);
-
+	last_cmd = NULL;
 	if (!dat.cmd || !dat.dir)
 		exit(1);
 	while (dat.exit == 0)
@@ -103,10 +104,18 @@ int	main(int argc, char **argv, char **env)
 			// free_list(&dat);
 			exit(0);
 		}
-		add_history(dat.cmd);
+		if ((!last_cmd || ft_strcmp(last_cmd, dat.cmd) != 0) && IS_LINUX)
+		{
+			add_history(dat.cmd);
+			free(last_cmd);
+			last_cmd = ft_strdup(dat.cmd);
+		}
+		else if (!IS_LINUX)
+			add_history(dat.cmd);
 		// shell_cmd(&dat);
 		*dat.cmd = '\0';
 	}
 	ft_free_env(dat.env);
+	free(last_cmd);
 	exit(dat.ret);
 }
