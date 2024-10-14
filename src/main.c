@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:30:52 by hetan             #+#    #+#             */
-/*   Updated: 2024/09/26 06:35:28 by hetan            ###   ########.fr       */
+/*   Updated: 2024/10/14 23:57:11 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,11 @@ void	ini_list(t_meta *dat)
 	dat->len = 0;
 	dat->ret = 0;
 	dat->exit = 0;
+	dat->d_left = 0;
+	dat->d_right = 0;
+	dat->left = 0;
+	dat->right = 0;
+	dat->pipe = 0;
 }
 
 // void    shell_cmd (t_meta *dat)
@@ -98,6 +103,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		check_sig();
 		curr_dir();
+		refresh_symbol(&dat);
 		dat.cmd = readline("");
 		if (!dat.cmd || !strcmp(dat.cmd, "exit"))
 		{

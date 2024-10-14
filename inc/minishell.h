@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:52:11 by hetan             #+#    #+#             */
-/*   Updated: 2024/09/26 06:19:22 by hetan            ###   ########.fr       */
+/*   Updated: 2024/10/14 23:53:26 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,11 @@ typedef struct s_meta
 	ssize_t	len;
 	int		ret;
 	int		exit;
+	int		pipe;
+	int		left;
+	int		d_left;
+	int		right;
+	int		d_right;
 }   t_meta;
 
 typedef struct s_cwd
