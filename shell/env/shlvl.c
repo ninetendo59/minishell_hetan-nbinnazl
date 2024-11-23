@@ -42,9 +42,11 @@ void	ft_lvl_increment(t_env *env)
 {
 	char	*shell_level_value;
 	char	env_name[BUFFER_SIZE];
+	char	*tmp;
 	int		shell_level;
 
 	shell_level_value = ft_getenv_value("SHLVL", env);
+	tmp = NULL;
 	if (shell_level_value && *shell_level_value)
 	{
 		shell_level = ft_lvl_get(shell_level_value) + 1;
@@ -55,7 +57,9 @@ void	ft_lvl_increment(t_env *env)
 			if (ft_strcmp("SHLVL", env_name) == 0)
 			{
 				ft_memdel(env->value);
-				env->value = ft_strjoin("SHLVL=", ft_itoa(shell_level));
+				tmp = ft_itoa(shell_level);
+				env->value = ft_strjoin("SHLVL=", tmp);
+				ft_memdel(tmp);
 				return ;
 			}
 			env = env->next;

@@ -6,15 +6,15 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 03:49:15 by hetan             #+#    #+#             */
-/*   Updated: 2024/11/24 03:40:22 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/24 04:23:42 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 //buffer size when it's not declared
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+# ifndef GNL_BUFFER_SIZE
+#  define GNL_BUFFER_SIZE 42
 # endif
 //maximum fd as standard in mac is 256 and current standard is 1024
 # ifndef MAX_FD

@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:52:11 by hetan             #+#    #+#             */
-/*   Updated: 2024/11/24 03:26:56 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/24 06:44:57 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ typedef struct	s_token
 typedef struct s_meta
 {
 	char	*cmd;
-	char	*dir;
+	// char	*dir;
 	t_env	*env;
 	t_env	*secret_env;
 	ssize_t	len;
@@ -232,7 +232,7 @@ int		ft_has_pipe(t_token *token);
 void	ft_skip_whitespace(const char *str, int *i);
 
 int		ft_syntax_error(t_meta *minishell, char *token_str);
-int		ft_get_next_line(int fd, char **line);
+// int		ft_get_next_line(int fd, char **line);
 
 /* ************************************************************************** */
 /*     EXECUTE                                                                */

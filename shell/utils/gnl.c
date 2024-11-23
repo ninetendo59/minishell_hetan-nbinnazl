@@ -9,7 +9,7 @@ int	ft_newline_check(char *stock, int read_size)
 		else
 			return (0);
 	}
-	while (*stock)
+	while (*stock && stock != NULL)
 	{
 		if (*stock == '\n')
 			return (1);

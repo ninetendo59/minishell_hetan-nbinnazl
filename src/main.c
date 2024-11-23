@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:30:52 by hetan             #+#    #+#             */
-/*   Updated: 2024/11/24 03:52:27 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/24 06:54:12 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ static void	curr_dir(void)
 
 void	ft_init_list(t_meta *dat)
 {
-	dat->cmd = malloc(sizeof(*dat->cmd) * (BUFFER_SIZE + 1));
-	dat->dir = malloc(sizeof(*dat->dir) + 1);
+	// dat->dir = malloc(sizeof(*dat->dir) + 1);
 	dat->len = 0;
 	dat->ret = 0;
 	dat->exit = 0;
@@ -77,14 +76,15 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 
-	ft_init_signal();
+	// ft_init_signal();
 	ft_init_list(&dat);
+	// dat.cmd = malloc((BUFFER_SIZE + 1));
 	ft_reset_fds(&dat);
 	ft_init_env(&dat, env);
 	ft_init_secret_env(&dat, env);
 	ft_lvl_increment(dat.env);
 	last_cmd = NULL;
-	if (!dat.cmd || !dat.dir)
+	if (!dat.cmd)
 		exit(1);
 	while (dat.exit == 0)
 	{
@@ -92,7 +92,7 @@ int	main(int argc, char **argv, char **env)
 		dat.cmd = readline("");
 
 
-		// ft_init_signal();
+		ft_init_signal();
 		ft_parse_input(&dat);
 		if (dat.start != NULL && ft_check_line(&dat, dat.start))
 			ft_minishell(&dat);
@@ -113,6 +113,9 @@ int	main(int argc, char **argv, char **env)
 	}
 	ft_free_env(dat.env);
 	ft_free_env(dat.secret_env);
+	// free(dat.dir);
+	free (dat.cmd);
+	rl_clear_history();
 	free(last_cmd);
 	exit(dat.ret);
 }

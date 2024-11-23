@@ -10,7 +10,7 @@ int	ft_error_msg(char *path)
 	fd = open(path, O_WRONLY);
 	ft_putstr_fd("MINISHELL: ", 2);
 	ft_putstr_fd(path, 2);
-	if (!ft_gnlstrchr(path, '/'))
+	if (!ft_strchr(path, '/'))
 		ft_putendl_fd(": command not found", 2);
 	else if (fd == -1 && !folder)
 		ft_putendl_fd(": There is no such file or directory", 2);
@@ -18,7 +18,7 @@ int	ft_error_msg(char *path)
 		ft_putendl_fd(": is a directory", 2);
 	else
 		ft_putendl_fd(": Permission denied", 2);
-	if (!ft_gnlstrchr(path, '/') || (fd == -1 && !folder))
+	if (!ft_strchr(path, '/') || (fd == -1 && !folder))
 		ret = 127;
 	ret = 126;
 	if (folder)
@@ -40,7 +40,7 @@ int	ft_mgc_box(char *path, char **args, t_env *env, t_meta *minishell)
 		env_str = ft_envto_str(env);
 		env_array = ft_split(env_str, '\n');
 		ft_memdel(env_str);
-		if (ft_gnlstrchr(path, '/'))
+		if (ft_strchr(path, '/'))
 			execve(path, args, env_array);
 		ret = ft_error_msg(path);
 		ft_free_tab(env_array);

@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 03:53:34 by hetan             #+#    #+#             */
-/*   Updated: 2024/11/24 03:40:22 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/24 04:24:16 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,14 +109,14 @@ char	*gnl_get_fd(char *storage, int fd)
 	char	*buffer;
 	int		rd;
 
-	buffer = malloc (sizeof(*buffer) * ((long int)BUFFER_SIZE + 1));
+	buffer = malloc (sizeof(*buffer) * ((long int)GNL_BUFFER_SIZE + 1));
 	if (!buffer)
 		return (gnl_free_storage (&storage));
 	*buffer = '\0';
 	rd = 1;
 	while (rd > 0 && !(gnl_strchr(buffer, '\n')))
 	{
-		rd = read(fd, buffer, BUFFER_SIZE);
+		rd = read(fd, buffer, GNL_BUFFER_SIZE);
 		if (rd > 0)
 		{
 			*(buffer + rd) = '\0';

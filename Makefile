@@ -23,7 +23,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	make -C libft
-	$(CC) $(CFLAGS) -I $(HEADER) $(OBJ) $(LIBRARY) -o $@ -lreadline
+	$(CC) $(CFLAGS) -I $(HEADER) $(OBJ) $(LIBRARY) -g -o $@ -lreadline
 
 $(OBJ): %.o: %.c
 	$(CC) $(CFLAGS) -I $(HEADER) -c $< -o $@
