@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:52:11 by hetan             #+#    #+#             */
-/*   Updated: 2024/10/14 23:53:26 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/24 03:26:56 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,7 +253,7 @@ char	*ft_check_dir(char *bin, char *command);
 /*     builtin                                                                */
 /* ************************************************************************** */
 
-int		ft_is_builtin(char *command);
+int		ft_isbuiltin(char *command);
 int		ft_exec_builtin(char **args, t_meta *minishell);
 
 /* ************************************************************************** */

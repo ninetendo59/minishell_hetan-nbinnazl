@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 20:42:46 by hetan             #+#    #+#             */
-/*   Updated: 2024/09/08 06:39:07 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/24 03:33:44 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 char	*ft_strdup(const char *str);
-char	*ft_strchr(const char *str, int c);
+char	*ft_gnlstrchr(const char *str, int c);
 char	*ft_strrchr(const char *str, int c);
 char	*ft_strnstr(const char *hay, const char *need, size_t size);
 char	*ft_strjoin(char const *s1, const char *s2);

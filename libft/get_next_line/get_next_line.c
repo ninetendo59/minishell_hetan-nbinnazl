@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 03:53:34 by hetan             #+#    #+#             */
-/*   Updated: 2024/01/03 02:59:20 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/24 03:40:22 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 	1. Safe way to free memory that has been allocated dynamically.
 	2. Could avoid dangling pointer.
 */
-char	*free_storage(char **storage)
+char	*gnl_free_storage(char **storage)
 {
 	free(*storage);
 	*storage = NULL;
@@ -40,7 +40,7 @@ char	*free_storage(char **storage)
 	Moreover, substr is way more easier than using ft_strtrim and make the code
 	looks mere cleaner.
 */
-char	*ft_store_data(char *storage)
+char	*gnl_store_data(char *storage)
 {
 	char	*new;
 	char	*strchr_nl;
@@ -51,15 +51,15 @@ char	*ft_store_data(char *storage)
 	if (!strchr_nl)
 	{
 		new = NULL;
-		return (free_storage(&storage));
+		return (gnl_free_storage(&storage));
 	}
 	else
 		line_len = (size_t)(strchr_nl - storage) + 1;
 	if (!*(storage + line_len))
-		return (free_storage (&storage));
+		return (gnl_free_storage (&storage));
 	stor_len = ft_strlen(storage) - line_len;
 	new = gnl_substr(storage, line_len, stor_len);
-	free_storage(&storage);
+	gnl_free_storage(&storage);
 	if (!new)
 		return (NULL);
 	return (new);
@@ -77,7 +77,7 @@ char	*ft_store_data(char *storage)
 	extracted from storage include the \n and terminate 0 when finished.
 	that's where substr came handy :D
 */
-char	*ft_get_line(char *storage)
+char	*gnl_get_line(char *storage)
 {
 	char	*line;
 	char	*strchr_nl;
@@ -104,14 +104,14 @@ char	*ft_get_line(char *storage)
 	why i free storage when rd is < 0 because to handle any read errors 
 	that occur after it starts reading from a valid fd.
 */
-char	*ft_get_fd(char *storage, int fd)
+char	*gnl_get_fd(char *storage, int fd)
 {
 	char	*buffer;
 	int		rd;
 
 	buffer = malloc (sizeof(*buffer) * ((long int)BUFFER_SIZE + 1));
 	if (!buffer)
-		return (free_storage (&storage));
+		return (gnl_free_storage (&storage));
 	*buffer = '\0';
 	rd = 1;
 	while (rd > 0 && !(gnl_strchr(buffer, '\n')))
@@ -125,7 +125,7 @@ char	*ft_get_fd(char *storage, int fd)
 	}
 	free(buffer);
 	if (rd < 0)
-		return (free_storage (&storage));
+		return (gnl_free_storage (&storage));
 	return (storage);
 }
 
@@ -150,13 +150,13 @@ char	*get_next_line(int fd)
 
 	if (fd < 0)
 		return (NULL);
-	if (!storage[fd] || (storage[fd] && !ft_strchr (storage[fd], '\n')))
-		storage[fd] = ft_get_fd(storage[fd], fd);
+	if (!storage[fd] || (storage[fd] && !gnl_strchr (storage[fd], '\n')))
+		storage[fd] = gnl_get_fd(storage[fd], fd);
 	if (!storage[fd])
 		return (NULL);
-	line = ft_get_line (storage[fd]);
+	line = gnl_get_line (storage[fd]);
 	if (!line)
-		return (free_storage (&storage[fd]));
-	storage[fd] = ft_store_data (storage[fd]);
+		return (gnl_free_storage (&storage[fd]));
+	storage[fd] = gnl_store_data (storage[fd]);
 	return (line);
 }

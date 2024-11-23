@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:30:52 by hetan             #+#    #+#             */
-/*   Updated: 2024/10/14 23:57:11 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/24 03:52:27 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 
-	// ft_init_signal();
+	ft_init_signal();
 	ft_init_list(&dat);
 	ft_reset_fds(&dat);
 	ft_init_env(&dat, env);
@@ -92,7 +92,7 @@ int	main(int argc, char **argv, char **env)
 		dat.cmd = readline("");
 
 
-		ft_init_signal();
+		// ft_init_signal();
 		ft_parse_input(&dat);
 		if (dat.start != NULL && ft_check_line(&dat, dat.start))
 			ft_minishell(&dat);

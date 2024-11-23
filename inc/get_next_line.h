@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 03:49:15 by hetan             #+#    #+#             */
-/*   Updated: 2024/01/03 03:00:02 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/24 03:40:22 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ size_t	gnl_strlcpy(char *dest, char *src, size_t size);
 
 //gnl related
 char	*get_next_line(int fd);//the main function of gnl
-char	*ft_get_fd(char *storage, int fd);//read the opened fd
-char	*ft_store_data(char *storage);//clean the unecessary value
-char	*ft_get_line(char *storage);//extracting 
-char	*free_storage(char	**storage);//free the mem of str that used by line
+char	*gnl_get_fd(char *storage, int fd);//read the opened fd
+char	*gnl_store_data(char *storage);//clean the unecessary value
+char	*gnl_get_line(char *storage);//extracting 
+char	*gnl_free_storage(char	**storage);//free the mem of str that used by line
 
 #endif

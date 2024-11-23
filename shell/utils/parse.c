@@ -2,14 +2,14 @@
 
 int	ft_issep(char *line, int i)
 {
-	if (i > 0 && line[i - 1] == '\\' && ft_strchr("<>|;", line[i]))
+	if (i > 0 && line[i - 1] == '\\' && ft_gnlstrchr("<>|;", line[i]))
 		return (0);
-	return (ft_strchr("<>|;", line[i]) && ft_quotes(line, i) == 0);
+	return (ft_gnlstrchr("<>|;", line[i]) && ft_quotes(line, i) == 0);
 }
 
 int	ft_ignore_sep(char *line, int i)
 {
-	if (line[i] == '\\' && line[i + 1] && ft_strchr(";|><", line[i + 1])
+	if (line[i] == '\\' && line[i + 1] && ft_gnlstrchr(";|><", line[i + 1])
 		&& (line[i + 2] == '>' || line[i + 1] != '>'))
 		return (1);
 	return (0);

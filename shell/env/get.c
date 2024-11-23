@@ -27,7 +27,7 @@ int	ft_envvalue_len(const char *env)
 {
 	const char	*value;
 
-	value = ft_strchr(env, '=');
+	value = ft_gnlstrchr(env, '=');
 	if (value)
 		return (ft_strlen(value + 1));
 	return (0);
@@ -37,7 +37,7 @@ char	*ft_envvalue(const char *env)
 {
 	const char	*value;
 
-	value = ft_strchr(env, '=');
+	value = ft_gnlstrchr(env, '=');
 	if (value)
 		return (ft_strdup(value + 1));
 	return (NULL);

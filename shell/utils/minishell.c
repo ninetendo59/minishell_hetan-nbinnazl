@@ -24,8 +24,7 @@ void	ft_redir_and_exec(t_meta *minishell, t_token *token)
 	ft_redir(minishell, token, prev, &pipe);
 	if (next && !ft_istype(next, END) && pipe != 1)
 		ft_redir_and_exec(minishell, next->next);
-	if ((ft_istype(prev, END) || ft_istype(prev, PIPE) || !prev)
-		&& pipe != 1 && !minishell->no_exec)
+	if ((ft_istype(prev, END) || ft_istype(prev, PIPE) || !prev) && pipe != 1 && !minishell->no_exec)
 		ft_exec_cmd(minishell, token);
 }
 

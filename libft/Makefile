@@ -6,12 +6,12 @@
 #    By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/02 23:26:27 by hetan             #+#    #+#              #
-#    Updated: 2024/09/08 06:23:41 by hetan            ###   ########.fr        #
+#    Updated: 2024/11/24 03:06:54 by hetan            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
-HEADER = ../header
+HEADER = ../inc
 CFLAGS = -Wall -Wextra -Werror -I $(HEADER)
 RM = rm -rf
 PRINTF_DIRS = ft_printf/src/

@@ -49,12 +49,12 @@ void	ft_exec_cmd(t_meta *minishell, t_token *token)
 	cmd = ft_cmd_tab(token);
 	while (cmd && cmd[i])
 	{
-		cmd[i] = expansions(cmd[i], minishell->env, minishell->ret);
+		cmd[i] = ft_expansions(cmd[i], minishell->env, minishell->ret);
 		i++;
 	}
 	if (cmd)
 	{
-		if (ft_strcmp(cmd[0], "exit") == 0 && !has_pipe(token))
+		if (ft_strcmp(cmd[0], "exit") == 0 && !ft_has_pipe(token))
 			ft_b_exit(minishell, cmd);
 		else if (ft_isbuiltin(cmd[0]))
 			minishell->ret = ft_exec_builtin(cmd, minishell);

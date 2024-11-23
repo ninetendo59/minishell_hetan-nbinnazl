@@ -77,12 +77,13 @@ void	ft_parse_input(t_meta *minishell)
 {
 	char	*line;
 
+	line = NULL;
 	signal(SIGINT, &ft_sig_int);
 	signal(SIGQUIT, &ft_sig_quit);
 	if (minishell->ret)
-		ft_putstr_fd("🔴 ", 2);
-	else
 		ft_putstr_fd("🟢 ", 2);
+	else
+		ft_putstr_fd("🔴 ", 2);
 	ft_putstr_fd("\033[0;36m\033[1mminishell ▸ \033[0m", 2);
 	minishell->exit = 1;
 	if (ft_get_next_line(0, &line) == -2 && minishell->exit)
