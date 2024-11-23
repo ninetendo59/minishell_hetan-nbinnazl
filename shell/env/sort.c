@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int ft_str_envlen(char **env)
+int	ft_str_envlen(char **env)
 {
 	int		i;
 
@@ -10,14 +10,14 @@ int ft_str_envlen(char **env)
 	return (i);
 }
 
-void    ft_sort_env(char **tab, int env_len)
+void	ft_sort_env(char **tab, int env_len)
 {
 	int		sorted;
 	int		i;
 	char	*tmp;
 
 	sorted = 0;
-	while (tab && sorted == 0)
+	while (tab && !sorted)
 	{
 		sorted = 1;
 		i = 0;
@@ -36,21 +36,19 @@ void    ft_sort_env(char **tab, int env_len)
 	}
 }
 
-void    ft_print_sortedenv(t_env *env)
+void	ft_print_sortedenv(t_env *env)
 {
-	int     i;
-	char    **tab;
-	char    *str_env;
+	int		i;
+	char	**tab;
 
-	str_env = ft_envto_str(env);
-	tab = ft_split(str_env, '\n');
-	ft_memdel(str_env);
+	tab = ft_split(ft_envto_str(env), '\n');
 	ft_sort_env(tab, ft_str_envlen(tab));
 	i = 0;
 	while (tab[i])
 	{
-		ft_putstr("declare -x ");
-		ft_putendl(tab[i]);
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(tab[i], 1);
+		ft_putchar_fd('\n', 1);
 		i++;
 	}
 	ft_free_tab(tab);

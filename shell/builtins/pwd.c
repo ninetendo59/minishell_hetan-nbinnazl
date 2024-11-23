@@ -14,19 +14,13 @@
 
 int	ft_b_pwd(void)
 {
-	char	*cwd;
+	char	cwd[BUFFER_SIZE + 1];
 
-	cwd = malloc(sizeof(*cwd) * (BUFFER_SIZE + 1));
-	if (!cwd)
-		return (free(cwd), 1);
-	if (getcwd(cwd, BUFFER_SIZE + 1) != NULL)
+	if (getcwd(cwd, sizeof(cwd)))
 	{
 		ft_putendl_fd(cwd, 1);
-		return (free(cwd), 0);
+		return (0);
 	}
-	else
-	{
-		perror("getcwd() error");
-		return (free(cwd), 1);
-	}
+	perror("getcwd() error");
+	return (1);
 }

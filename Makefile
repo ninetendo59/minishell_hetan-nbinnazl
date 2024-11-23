@@ -1,13 +1,23 @@
-NAME	=	minishell
-CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror
-HEADER 	=	inc
-SRC		=	src/main.c src/signalling.c	src/rd_cmd.c\
-			shell/builtins/cd.c shell/builtins/echo.c shell/builtins/env.c shell/builtins/exit.c shell/builtins/export.c shell/builtins/pwd.c shell/builtins/unset.c	\
-			shell/builtins/env.c shell/env/sort.c	\
+NAME		=	minishell
+CC			=	gcc
+CFLAGS		=	-Wall -Wextra -Werror
+HEADER 		=	inc
+BUILTINS	=	cd echo env exit export pwd unset
+ENV			=	env get shlvl sort
+EXEC		=	bin builtin
+PARSE		=	expansion line token
+UTILS		=	expansion fd free gnl minishell parse redir token type utils
+MINI		=	main rd_cmd signalling
+
+SRC			=	$(addsuffix .c, $(addprefix shell/builtins/, $(BUILTINS))) \
+				$(addsuffix .c, $(addprefix shell/env/, $(ENV))) \
+				$(addsuffix .c, $(addprefix shell/exec/, $(EXEC))) \
+				$(addsuffix .c, $(addprefix shell/parse/, $(PARSE))) \
+				$(addsuffix .c, $(addprefix shell/utils/, $(UTILS))) \
+				$(addsuffix .c, $(addprefix src/, $(MINI)))
 
 # LIBRARY	= 	libft/libft.a 
-OBJ 	=	$(SRC:.c=.o)
+OBJ 		=	$(SRC:.c=.o)
 
 all: $(NAME)
 

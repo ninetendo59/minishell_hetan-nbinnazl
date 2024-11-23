@@ -14,7 +14,7 @@
 
 t_sig	g_sig;
 
-void	disp_home(char *cwd, char *home)
+static void	disp_home(char *cwd, char *home)
 {
 	char	*display;
 
@@ -27,7 +27,7 @@ void	disp_home(char *cwd, char *home)
 	free(display);
 }
 
-void	curr_dir(void)
+static void	curr_dir(void)
 {
 	char	*cwd;
 	char	*home;
@@ -35,7 +35,7 @@ void	curr_dir(void)
 	cwd = malloc(sizeof(*cwd) * (BUFFER_SIZE + 1));
 	if (!cwd)
 		return ;
-	write(1, "\e[32mMINISHELL: \e[0m", strlen("\e[32mMINISHELL: \e[0m"));
+	write(1, "\e[32m⚪ MINISHELL: \e[0m", strlen("\e[32m⚪ MINISHELL: \e[0m"));
 	if (getcwd(cwd, BUFFER_SIZE + 1) != NULL)
 	{
 		home = getenv("HOME");
@@ -51,23 +51,7 @@ void	curr_dir(void)
 	free(cwd);
 }
 
-
-
-// void check_sig(void)
-// {
-// 	signal(SIGINT, ctrl_c);
-// 	signal(SIGQUIT, SIG_IGN);
-// 	return ;
-// }
-
-// void ctrl_c(int sig)
-// {
-// 	(void)sig;
-// 	write(1, "\n", 1);
-// 	current_dir();
-// }
-
-void	ini_list(t_meta *dat)
+void	ft_init_list(t_meta *dat)
 {
 	dat->cmd = malloc(sizeof(*dat->cmd) * (BUFFER_SIZE + 1));
 	dat->dir = malloc(sizeof(*dat->dir) + 1);
@@ -78,13 +62,13 @@ void	ini_list(t_meta *dat)
 	dat->d_right = 0;
 	dat->left = 0;
 	dat->right = 0;
-	dat->pipe = 0;
+	dat->exit = 0;
+	dat->ret = 0;
+	dat->no_exec = 0;
+	dat->in = dup(0);
+	dat->out = dup(1);
+	// dat->pipe = 0;
 }
-
-// void    shell_cmd (t_meta *dat)
-// {
-// 	if (strncmp(dat->cmd, "echo", ))
-// }
 
 int	main(int argc, char **argv, char **env)
 {
@@ -93,23 +77,30 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 
-	ft_init_signal();
-	ini_list(&dat);
+	// ft_init_signal();
+	ft_init_list(&dat);
+	ft_reset_fds(&dat);
 	ft_init_env(&dat, env);
+	ft_init_secret_env(&dat, env);
+	ft_lvl_increment(dat.env);
 	last_cmd = NULL;
 	if (!dat.cmd || !dat.dir)
 		exit(1);
 	while (dat.exit == 0)
 	{
-		check_sig();
 		curr_dir();
-		refresh_symbol(&dat);
 		dat.cmd = readline("");
+
+
+		ft_init_signal();
+		ft_parse_input(&dat);
+		if (dat.start != NULL && ft_check_line(&dat, dat.start))
+			ft_minishell(&dat);
+		ft_free_token(dat.start);
+
+
 		if (!dat.cmd || !strcmp(dat.cmd, "exit"))
-		{
-			// free_list(&dat);
 			exit(0);
-		}
 		if ((!last_cmd || ft_strcmp(last_cmd, dat.cmd) != 0) && IS_LINUX)
 		{
 			add_history(dat.cmd);
@@ -118,10 +109,10 @@ int	main(int argc, char **argv, char **env)
 		}
 		else if (!IS_LINUX)
 			add_history(dat.cmd);
-		// shell_cmd(&dat);
 		*dat.cmd = '\0';
 	}
 	ft_free_env(dat.env);
+	ft_free_env(dat.secret_env);
 	free(last_cmd);
 	exit(dat.ret);
 }
