@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:30:52 by hetan             #+#    #+#             */
-/*   Updated: 2024/11/24 03:52:27 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/25 03:49:49 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ void	ft_init_list(t_meta *dat)
 	dat->no_exec = 0;
 	dat->in = dup(0);
 	dat->out = dup(1);
+	dat->env = NULL;
+	dat->secret_env = NULL;
 	// dat->pipe = 0;
 }
 
@@ -77,7 +79,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 
-	ft_init_signal();
+	// ft_init_signal();
 	ft_init_list(&dat);
 	ft_reset_fds(&dat);
 	ft_init_env(&dat, env);
@@ -86,21 +88,29 @@ int	main(int argc, char **argv, char **env)
 	last_cmd = NULL;
 	if (!dat.cmd || !dat.dir)
 		exit(1);
+	// curr_dir();
 	while (dat.exit == 0)
 	{
 		curr_dir();
 		dat.cmd = readline("");
 
-
-		// ft_init_signal();
+		printf("done 1\n");
+		ft_init_signal();
+		printf("done 2\n");
 		ft_parse_input(&dat);
+		printf("done 3\n");
 		if (dat.start != NULL && ft_check_line(&dat, dat.start))
+		{
+			printf("done test\n");
 			ft_minishell(&dat);
+		}
+		printf("done 4\n");
 		ft_free_token(dat.start);
-
-
+		printf("done 5\n");
+		
 		if (!dat.cmd || !strcmp(dat.cmd, "exit"))
 			exit(0);
+		printf("done 6\n");
 		if ((!last_cmd || ft_strcmp(last_cmd, dat.cmd) != 0) && IS_LINUX)
 		{
 			add_history(dat.cmd);
@@ -109,7 +119,9 @@ int	main(int argc, char **argv, char **env)
 		}
 		else if (!IS_LINUX)
 			add_history(dat.cmd);
+		printf("done 7\n");
 		*dat.cmd = '\0';
+		printf("done 8\n");
 	}
 	ft_free_env(dat.env);
 	ft_free_env(dat.secret_env);

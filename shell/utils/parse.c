@@ -20,9 +20,11 @@ int	ft_quotes(char *line, int index)
 	int	i;
 	int	open;
 
+	if (!line)
+		return (0);
 	i = 0;
 	open = 0;
-	while (i < index && line[i])
+	while ((i < index) && line[i] != '\0')
 	{
 		if (i > 0 && line[i - 1] != '\\')
 		{

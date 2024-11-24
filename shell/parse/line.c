@@ -7,6 +7,8 @@ static char	*ft_alloc_with_spaces(char *line)
 
 	count = 0;
 	i = 0;
+	if (!line)
+		return (NULL);
 	while (line[i])
 		count += ft_issep(line, i++);
 	return (malloc(sizeof(char) * (i + 2 * count + 1)));
@@ -77,7 +79,7 @@ void	ft_parse_input(t_meta *minishell)
 {
 	char	*line;
 
-	line = NULL;
+	line = minishell->cmd;
 	signal(SIGINT, &ft_sig_int);
 	signal(SIGQUIT, &ft_sig_quit);
 	if (minishell->ret)
@@ -86,16 +88,20 @@ void	ft_parse_input(t_meta *minishell)
 		ft_putstr_fd("🔴 ", 2);
 	ft_putstr_fd("\033[0;36m\033[1mminishell ▸ \033[0m", 2);
 	minishell->exit = 1;
+	
+	// if (ft_get_next_line(0, &line) == -2 && minishell->exit)
 	if (ft_get_next_line(0, &line) == -2 && minishell->exit)
 	{
 		ft_putendl_fd("exit", 2);
 		return ;
 	}
+	// printf("%s", line);
 	if (g_sig.sigint == 1)
 		minishell->ret = g_sig.exit_stat;
 	else
 		minishell->ret = minishell->ret;
 	if (ft_check_quotes(minishell, &line))
 		return ;
+	
 	ft_process_tokens(minishell, line);
 }

@@ -107,6 +107,8 @@ t_token	*ft_get_tokens(char *line)
 	int		i;
 	int		sep;
 
+	if (!line)
+		return (NULL);
 	i = 0;
 	prev = NULL;
 	next = NULL;
