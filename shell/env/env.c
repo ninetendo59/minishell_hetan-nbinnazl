@@ -42,25 +42,26 @@ char	*ft_envto_str(t_env *lst)
 
 int	ft_init_env(t_meta *minishell, char **env_array)
 {
-	t_env	**curr;
+	t_env	*curr;
 	int		i;
 
 	if (!env_array || !env_array[0])
 		return (1);
-	curr = &minishell->env;
+	curr = minishell->env;
 	i = 0;
 	while (env_array && env_array[i])
 	{
-		*curr = malloc(sizeof(t_env));
-		if (!(*curr))
+		curr = malloc(sizeof(t_env));
+		if (!(curr))
 			return (1);
-		(*curr)->value = ft_strdup(env_array[i]);
-		if (!(*curr)->value)
-			return (free(*curr), 1);
-		(*curr)->next = NULL;
-		curr = &(*curr)->next;
+		curr->value = ft_strdup(env_array[i]);
+		if (!curr->value)
+			return (free(curr), 1);
+		// curr->next = NULL;
+		curr = curr->next;
 		i++;
 	}
+	curr = NULL;
 	return (0);
 }
 
