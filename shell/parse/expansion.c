@@ -10,47 +10,52 @@ static int	ft_copy_envvalue(char *new_arg, const char *env_value, int pos)
 	return (i);
 }
 
-static void	ft_insert_var(t_exp *ex, char *arg, t_env *env, int ret)
+static void	ft_insert_var(t_exp *exp, char *arg, t_env *env, int ret)
 {
 	char	*env_value;
 
-	env_value = ft_get_varvalue(arg, ex->j, env, ret);
+	env_value = ft_get_varvalue(arg, exp->j, env, ret);
 	if (env_value)
-		ex->i += ft_copy_envvalue(ex->new_arg, env_value, ex->i);
+		exp->i += ft_copy_envvalue(exp->new_arg, env_value, exp->i);
 	ft_memdel(env_value);
-	if (arg[ex->j] == '?')
-		ex->j++;
-	else if (!ft_isdigit(arg[ex->j]) && arg[ex->j - 1] != '?')
-		while (ft_isenv_char(arg[ex->j]))
-			ex->j++;
-	else if (arg[ex->j - 1] != '?')
-		ex->j++;
+	if (arg[exp->j] == '?')
+		exp->j++;
+	if (ft_isdigit(arg[exp->j]) == 0 && arg[exp->j - 1] != '?')
+	{
+		while (ft_isenv_char(arg[exp->j]) == 1)
+			exp->j++;
+	}
+	else
+	{
+		if (arg[exp->j - 1] != '?')
+			exp->j++;
+	}
 }
 
 char	*ft_expansions(char *arg, t_env *env, int ret)
 {
-	t_exp	ex;
+	t_exp	exp;
 	int		new_arg_len;
 
+	exp.i = 0;
+	exp.j = 0;
 	new_arg_len = ft_arg_alloclen(arg, env, ret);
-	ex.new_arg = malloc(new_arg_len + 1);
-	if (!ex.new_arg)
+	exp.new_arg = malloc(new_arg_len + 1);
+	if (!exp.new_arg)
 		return (NULL);
-	ex.i = 0;
-	ex.j = 0;
-	while (ex.i < new_arg_len && arg[ex.j])
+	while (exp.i < new_arg_len && arg[exp.j])
 	{
-		if (arg[ex.j] == -36)
+		while (arg[exp.j] == -36)
 		{
-			ex.j++;
-			if (!arg[ex.j] || (!ft_isalnum(arg[ex.j]) && arg[ex.j] != '?'))
-				ex.new_arg[ex.i++] = '$';
+			exp.j++;
+			if (arg[exp.j] != '?' && (arg[exp.j] == '\0'
+					|| ft_isalnum(arg[exp.j]) == 0))
+				exp.new_arg[exp.i++] = '$';
 			else
-				ft_insert_var(&ex, arg, env, ret);
+				ft_insert_var(&exp, arg, env, ret);
 		}
-		else
-			ex.new_arg[ex.i++] = arg[ex.j++];
+		exp.new_arg[exp.i++] = arg[exp.j++];
 	}
-	ex.new_arg[ex.i] = '\0';
-	return (ex.new_arg);
+	exp.new_arg[exp.i] = '\0';
+	return (exp.new_arg);
 }

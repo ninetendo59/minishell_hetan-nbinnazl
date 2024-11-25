@@ -28,7 +28,7 @@ t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 char	*ft_strdup(const char *str);
-char	*ft_gnlstrchr(const char *str, int c);
+char	*ft_strchr(const char *str, int c);
 char	*ft_strrchr(const char *str, int c);
 char	*ft_strnstr(const char *hay, const char *need, size_t size);
 char	*ft_strjoin(char const *s1, const char *s2);

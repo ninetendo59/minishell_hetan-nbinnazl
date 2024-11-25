@@ -5,9 +5,9 @@ size_t	ft_size_env(t_env *lst)
 	size_t	len;
 
 	len = 0;
-	while (lst)
+	while (lst && lst->next != NULL)
 	{
-		if (lst->value)
+		if (lst->value != NULL)
 			len += ft_strlen(lst->value) + 1;
 		lst = lst->next;
 	}
@@ -24,15 +24,19 @@ char	*ft_envto_str(t_env *lst)
 	if (!env)
 		return (NULL);
 	i = 0;
-	while (lst)
+	while (lst && lst->next != NULL)
 	{
-		if (lst->value)
+		if (lst->value != NULL)
 		{
-			len = ft_strlen(lst->value);
-			ft_strlcpy(&env[i], lst->value, len + 1);
-			i += len;
+			len = 0;
+			while (lst->value[len])
+			{
+				env[i] = lst->value[len];
+				i++;
+				len++;
+			}
 		}
-		if (lst->next)
+		if (lst->next->next != NULL)
 			env[i++] = '\n';
 		lst = lst->next;
 	}
@@ -42,23 +46,28 @@ char	*ft_envto_str(t_env *lst)
 
 int	ft_init_env(t_meta *minishell, char **env_array)
 {
-	t_env	**curr;
+	t_env	*curr;
+	t_env	*new;
 	int		i;
 
 	if (!env_array || !env_array[0])
 		return (1);
-	curr = &minishell->env;
-	i = 0;
-	while (env_array && env_array[i])
+	curr = malloc(sizeof(t_env));
+	if (!curr)
+		return (1);
+	curr->value = ft_strdup(env_array[0]);
+	curr->next = NULL;
+	minishell->env = curr;
+	i = 1;
+	while (env_array && env_array[0] && env_array[i])
 	{
-		*curr = malloc(sizeof(t_env));
-		if (!(*curr))
+		new = malloc(sizeof(t_env));
+		if (!new)
 			return (1);
-		(*curr)->value = ft_strdup(env_array[i]);
-		if (!(*curr)->value)
-			return (free(*curr), 1);
-		(*curr)->next = NULL;
-		curr = &(*curr)->next;
+		new->value = ft_strdup(env_array[i]);
+		new->next = NULL;
+		curr->next = new;
+		curr = new;
 		i++;
 	}
 	return (0);
@@ -66,23 +75,28 @@ int	ft_init_env(t_meta *minishell, char **env_array)
 
 int	ft_init_secret_env(t_meta *minishell, char **env_array)
 {
-	t_env	**curr;
+	t_env	*curr;
+	t_env	*new;
 	int		i;
 
 	if (!env_array || !env_array[0])
 		return (1);
-	curr = &minishell->secret_env;
-	i = 0;
-	while (env_array && env_array[i])
+	curr = malloc(sizeof(t_env));
+	if (!curr)
+		return (1);
+	curr->value = ft_strdup(env_array[0]);
+	curr->next = NULL;
+	minishell->secret_env = curr;
+	i = 1;
+	while (env_array && env_array[0] && env_array[i])
 	{
-		*curr = malloc(sizeof(t_env));
-		if (!(*curr))
+		new = malloc(sizeof(t_env));
+		if (!new)
 			return (1);
-		(*curr)->value = ft_strdup(env_array[i]);
-		if (!(*curr)->value)
-			return (free(*curr), 1);
-		(*curr)->next = NULL;
-		curr = &(*curr)->next;
+		new->value = ft_strdup(env_array[i]);
+		new->next = NULL;
+		curr->next = new;
+		curr = new;
 		i++;
 	}
 	return (0);

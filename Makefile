@@ -1,6 +1,6 @@
 NAME		=	minishell
 CC			=	gcc
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -g
 HEADER 		=	inc
 BUILTINS	=	cd echo env exit export pwd unset
 ENV			=	env get shlvl sort

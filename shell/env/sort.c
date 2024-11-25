@@ -40,8 +40,11 @@ void	ft_print_sortedenv(t_env *env)
 {
 	int		i;
 	char	**tab;
+	char	*str;
 
-	tab = ft_split(ft_envto_str(env), '\n');
+	str = ft_envto_str(env);
+	tab = ft_split(str, '\n');
+	ft_memdel(str);
 	ft_sort_env(tab, ft_str_envlen(tab));
 	i = 0;
 	while (tab[i])

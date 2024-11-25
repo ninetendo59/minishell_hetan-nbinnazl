@@ -28,7 +28,6 @@ void	ft_redir_and_exec(t_meta *minishell, t_token *token)
 		ft_exec_cmd(minishell, token);
 }
 
-
 static void	ft_execute_and_reset(t_meta *minishell, t_token *token)
 {
 	int	status;
@@ -57,13 +56,18 @@ void	ft_minishell(t_meta *minishell)
 	t_token	*token;
 
 	token = ft_next_run(minishell->start, 0);
+	printf("mshell start: %d, token: %d", !(!minishell->start), !(!token));
 	if (ft_istypes(minishell->start, "TAI"))
+	{
+		printf("run1\n");
 		token = minishell->start->next;
-
-	while (!minishell->exit && token)
+		printf("run2\n");
+	}
+	while (minishell->exit && token)
 	{
 		ft_execute_and_reset(minishell, token);
 		minishell->no_exec = 0;
 		token = ft_next_run(token, 1);
 	}
+	printf("run3\n");
 }

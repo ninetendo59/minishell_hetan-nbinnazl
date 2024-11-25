@@ -1,15 +1,5 @@
 #include "minishell.h"
 
-static void	ft_cleanup(t_meta *minishell, char **cmd)
-{
-	ft_free_tab(cmd);
-	ft_close(minishell->pipein);
-	ft_close(minishell->pipeout);
-	minishell->pipein = -1;
-	minishell->pipeout = -1;
-	minishell->charge = 0;
-}
-
 char	**ft_cmd_tab(t_token *start)
 {
 	t_token	*token;
@@ -17,11 +7,13 @@ char	**ft_cmd_tab(t_token *start)
 	int		count;
 
 	count = 2;
+	if (!start)
+		return (NULL);
 	token = start->next;
 	while (token && token->type < TRUNC)
 	{
-		count++;
 		token = token->next;
+		count++;
 	}
 	tab = malloc(sizeof(char *) * count);
 	if (!tab)
@@ -54,12 +46,17 @@ void	ft_exec_cmd(t_meta *minishell, t_token *token)
 	}
 	if (cmd)
 	{
-		if (ft_strcmp(cmd[0], "exit") == 0 && !ft_has_pipe(token))
+		if (ft_strcmp(cmd[0], "exit") == 0 && ft_has_pipe(token) == 0)
 			ft_b_exit(minishell, cmd);
 		else if (ft_isbuiltin(cmd[0]))
 			minishell->ret = ft_exec_builtin(cmd, minishell);
 		else
 			minishell->ret = ft_exec_bin(cmd, minishell->env, minishell);
 	}
-	ft_cleanup(minishell, cmd);
+	ft_free_tab(cmd);
+	ft_close(minishell->pipein);
+	ft_close(minishell->pipeout);
+	minishell->pipein = -1;
+	minishell->pipeout = -1;
+	minishell->charge = 0;
 }

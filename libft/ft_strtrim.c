@@ -25,9 +25,9 @@ char	*ft_strtrim(char const *s1, char const *set)
 		return (NULL);
 	if (!set)
 		return (ft_strdup(""));
-	while (s1[in] && ft_gnlstrchr(set, s1[in]))
+	while (s1[in] && ft_strchr(set, s1[in]))
 		in++;
-	while (out > in && ft_gnlstrchr(set, s1[out - 1]))
+	while (out > in && ft_strchr(set, s1[out - 1]))
 		out--;
 	len = out - in;
 	trim = (char *)malloc(sizeof(char) * (len + 1));

@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 //buffer size when it's not declared
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 8182
 # endif
 //maximum fd as standard in mac is 256 and current standard is 1024
 # ifndef MAX_FD

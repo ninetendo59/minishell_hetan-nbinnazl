@@ -2,14 +2,24 @@
 
 static char	*ft_alloc_with_spaces(char *line)
 {
-	int		count;
 	int		i;
+	int		count;
+	char	*new;
 
-	count = 0;
 	i = 0;
+	count = 0;
+	if (!line)
+		return (NULL);
 	while (line[i])
-		count += ft_issep(line, i++);
-	return (malloc(sizeof(char) * (i + 2 * count + 1)));
+	{
+		if (ft_issep(line, i))
+			count++;
+		i++;
+	}
+	new = malloc(sizeof(char) * (i + 2 * count + 1));
+	if (!new)
+		return (NULL);
+	return (new);
 }
 
 static char	*ft_proc_spaces(char *str)
@@ -25,7 +35,7 @@ static char	*ft_proc_spaces(char *str)
 	{
 		if (ft_quotes(str, i) != 2 && str[i] == '$' && i && str[i - 1] != '\\')
 			new[j++] = (char)(-str[i++]);
-		else if (ft_quotes(str, i) == 0 && ft_issep(str, i))
+		else if (ft_issep(str, i) && ft_quotes(str, i) == 0)
 		{
 			new[j++] = ' ';
 			new[j++] = str[i++];
@@ -36,16 +46,16 @@ static char	*ft_proc_spaces(char *str)
 		else
 			new[j++] = str[i++];
 	}
-	if (new)
-		new[j] = '\0';
-	return (ft_memdel(str), new);
+	new[j] = '\0';
+	ft_memdel(str);
+	return (new);
 }
 
 static int	ft_check_quotes(t_meta *minishell, char **line)
 {
 	if (ft_quotes(*line, INT_MAX))
 	{
-		ft_putendl_fd("minishell: syntax error with open quotes", 2);
+		ft_putendl_fd("MINISHELL: syntax error with open quotes", 2);
 		ft_memdel(*line);
 		minishell->ret = 2;
 		minishell->start = NULL;
@@ -62,6 +72,7 @@ static void	ft_process_tokens(t_meta *minishell, char *line)
 	if (line && line[0] == '$')
 		line[0] = (char)(-line[0]);
 	minishell->start = ft_get_tokens(line);
+	ft_memdel(line);
 	ft_squish_args(minishell);
 	token = minishell->start;
 	while (token)
@@ -70,27 +81,23 @@ static void	ft_process_tokens(t_meta *minishell, char *line)
 			ft_type_arg(token, 0);
 		token = token->next;
 	}
-	ft_memdel(line);
+	// ft_memdel(line);
 }
 
 void	ft_parse_input(t_meta *minishell)
 {
 	char	*line;
 
-	line = NULL;
 	signal(SIGINT, &ft_sig_int);
 	signal(SIGQUIT, &ft_sig_quit);
 	if (minishell->ret)
-		ft_putstr_fd("🟢 ", 2);
-	else
 		ft_putstr_fd("🔴 ", 2);
-	ft_putstr_fd("\033[0;36m\033[1mminishell ▸ \033[0m", 2);
+	else
+		ft_putstr_fd("🟢 ", 2);
+	ft_putstr_fd("\033[0;36m\033[1mMINISHELL ▸ \033[0m", 2);
 	minishell->exit = 1;
 	if (ft_get_next_line(0, &line) == -2 && minishell->exit)
-	{
 		ft_putendl_fd("exit", 2);
-		return ;
-	}
 	if (g_sig.sigint == 1)
 		minishell->ret = g_sig.exit_stat;
 	else

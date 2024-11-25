@@ -36,15 +36,20 @@ static t_token	*ft_next_token(char *line, int *i)
 	j = 0;
 	c = ' ';
 	token = malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
 	token->str = malloc(ft_next_alloc(line, i));
-	if (!token || !(token->str))
+	if (!(token->str))
 		return (NULL);
 	while (line[*i] && (line[*i] != ' ' || c != ' '))
 	{
 		if (c == ' ' && (line[*i] == '\'' || line[*i] == '\"'))
 			c = line[(*i)++];
 		else if (c != ' ' && line[*i] == c)
-			ft_reset_quote(&c, i);
+		{
+			c = ' ';
+			(*i)++;
+		}
 		else if (line[*i] == '\\' && (*i)++)
 			token->str[j++] = line[(*i)++];
 		else
@@ -90,11 +95,25 @@ void	ft_squish_args(t_meta *minishell)
 		{
 			while (!ft_islast_validarg(prev))
 				prev = prev->prev;
+			token->prev->next = token->next;
 			if (token->next)
 				token->next->prev = token->prev;
-			token->prev->next = token->next;
 			token->prev = prev;
-			ft_update_links(minishell, token, prev);
+			if (prev)
+				token->next = prev->next;
+			else
+				token->next = minishell->start;
+			if (!prev)
+				prev = token;
+			prev->next->prev = token;
+			if (minishell->start->prev)
+				prev->next = prev->next;
+			else
+				prev->next = token;
+			if (minishell->start->prev)
+				minishell->start = minishell->start->prev;
+			else
+				minishell->start = minishell->start;
 		}
 		token = token->next;
 	}
@@ -110,12 +129,18 @@ t_token	*ft_get_tokens(char *line)
 	i = 0;
 	prev = NULL;
 	next = NULL;
+	if (!line)
+		return (NULL);
 	ft_skip_whitespace(line, &i);
 	while (line[i])
 	{
 		sep = ft_ignore_sep(line, i);
 		next = ft_next_token(line, &i);
-		ft_process_token(&prev, next, sep);
+		next->prev = prev;
+		if (prev)
+			prev->next = next;
+		prev = next;
+		ft_type_arg(next, sep);
 		ft_skip_whitespace(line, &i);
 	}
 	if (next)

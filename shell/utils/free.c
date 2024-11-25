@@ -30,7 +30,8 @@ void	ft_free_tab(char **tab)
 	i = 0;
 	while (tab[i])
 		ft_memdel(tab[i++]);
-	ft_memdel(tab);
+	if (tab)
+		ft_memdel(tab);
 }
 
 void	ft_free_env(t_env *env)

@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:52:11 by hetan             #+#    #+#             */
-/*   Updated: 2024/11/24 03:26:56 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/25 02:45:41 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,11 +176,16 @@ void	ft_free_env(t_env *env);
 /*     gnl                                                                    */
 /* ************************************************************************** */
 
-int		ft_newline_check(char *stock, int read_size);
+// int		ft_newline_check(char *stock, int read_size);
 
-char	*ft_buff_join(char *stock, char *buff);
-char	*ft_stock_trim(char *stock);
-char	*ft_get_line(char *stock);
+// char	*ft_buff_join(char *stock, char *buff);
+// char	*ft_stock_trim(char *stock);
+// char	*ft_get_line(char *stock);
+
+char	*sh_free_storage(char **storage);
+char	*sh_store_data(char *storage);
+char	*sh_get_line(char *storage);
+char	*sh_get_fd(char *storage, int fd, int *ret);
 
 /* ************************************************************************** */
 /*     minishell                                                              */
@@ -209,10 +214,6 @@ int		ft_open_file(const char *path, int flags, int perms);
 /* ************************************************************************** */
 /*     token                                                                  */
 /* ************************************************************************** */
-
-void	ft_update_links(t_meta *minishell, t_token *token, t_token *prev);
-void	ft_process_token(t_token **prev, t_token *next, int sep);
-void	ft_reset_quote(char *c, int *i);
 
 t_token	*ft_sep(t_token *token, int skip, int next);
 t_token	*ft_next_run(t_token *token, int skip);
@@ -363,8 +364,8 @@ int		ft_isenv_char(int c);
 int		ft_isvalid_env(const char *env);
 int		ft_envvalue_len(const char *env);
 
-char	*ft_envvalue(const char *env);
-char	*ft_getenv_value(const char *arg, t_env *env);
+char	*ft_envvalue(char *env);
+char	*ft_getenv_value(char *arg, t_env *env);
 
 /* ************************************************************************** */
 /*     shlvl                                                                  */
