@@ -64,29 +64,10 @@ static int	ft_check_quotes(t_meta *minishell, char **line)
 	return (0);
 }
 
-static void	ft_process_tokens(t_meta *minishell, char *line)
-{
-	t_token	*token;
-
-	line = ft_proc_spaces(line);
-	if (line && line[0] == '$')
-		line[0] = (char)(-line[0]);
-	minishell->start = ft_get_tokens(line);
-	ft_memdel(line);
-	ft_squish_args(minishell);
-	token = minishell->start;
-	while (token)
-	{
-		if (ft_istype(token, ARG))
-			ft_type_arg(token, 0);
-		token = token->next;
-	}
-	// ft_memdel(line);
-}
-
 void	ft_parse_input(t_meta *minishell)
 {
 	char	*line;
+	t_token	*token;
 
 	signal(SIGINT, &ft_sig_int);
 	signal(SIGQUIT, &ft_sig_quit);
@@ -104,5 +85,18 @@ void	ft_parse_input(t_meta *minishell)
 		minishell->ret = minishell->ret;
 	if (ft_check_quotes(minishell, &line))
 		return ;
-	ft_process_tokens(minishell, line);
+	
+	line = ft_proc_spaces(line);
+	if (line && line[0] == '$')
+		line[0] = (char)(-line[0]);
+	minishell->start = ft_get_tokens(line);
+	ft_memdel(line);
+	ft_squish_args(minishell);
+	token = minishell->start;
+	while (token)
+	{
+		if (ft_istype(token, ARG))
+			ft_type_arg(token, 0);
+		token = token->next;
+	}
 }
