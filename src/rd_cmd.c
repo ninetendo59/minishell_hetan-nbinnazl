@@ -21,10 +21,14 @@ void	redir(t_meta *minishell, t_token *token, int type)
 		flags = (O_CREAT | O_WRONLY | O_TRUNC);
 	else
 		flags = (O_CREAT | O_WRONLY | O_APPEND);
-	minishell->fdout = ft_open_file(token->str, flags, S_IRWXU);
+	minishell->fdout = open(token->str, flags, S_IRWXU);
 	if (minishell->fdout == -1)
 	{
-		ft_handle_open_error(minishell, token->str);
+		ft_putstr_fd("MINISHELL: ", 2);
+		ft_putstr_fd(token->str, 2);
+		ft_putendl_fd(": No such file or directory", 2);
+		minishell->ret = 1;
+		minishell->no_exec = 1;
 		return ;
 	}
 	dup2(minishell->fdout, 1);
@@ -33,10 +37,14 @@ void	redir(t_meta *minishell, t_token *token, int type)
 void	input(t_meta *minishell, t_token *token)
 {
 	ft_close(minishell->fdin);
-	minishell->fdin = ft_open_file(token->str, O_RDONLY, S_IRWXU);
+	minishell->fdin = open(token->str, O_RDONLY, S_IRWXU);
 	if (minishell->fdin == -1)
 	{
-		ft_handle_open_error(minishell, token->str);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(token->str, 2);
+		ft_putendl_fd(": No such file or directory", 2);
+		minishell->ret = 1;
+		minishell->no_exec = 1;
 		return ;
 	}
 	dup2(minishell->fdin, 0);
@@ -59,10 +67,13 @@ int	minipipe(t_meta *minishell)
 		minishell->no_exec = 0;
 		return (2);
 	}
-	ft_close(pipefd[0]);
-	dup2(pipefd[1], 1);
-	minishell->pipeout = pipefd[1];
-	minishell->pid = pid;
-	minishell->last = 0;
-	return (1);
+	else
+	{
+		ft_close(pipefd[0]);
+		dup2(pipefd[1], 1);
+		minishell->pipeout = pipefd[1];
+		minishell->pid = pid;
+		minishell->last = 0;
+		return (1);
+	}
 }

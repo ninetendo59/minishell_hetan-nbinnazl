@@ -6,7 +6,7 @@ BUILTINS	=	cd echo env exit export pwd unset
 ENV			=	env get shlvl sort
 EXEC		=	bin builtin cmd
 PARSE		=	expansion line token
-UTILS		=	expansion fd free gnl minishell parse redir token type utils
+UTILS		=	expansion fd free gnl minishell parse token type utils
 MINI		=	main rd_cmd signalling
 
 SRC			=	$(addsuffix .c, $(addprefix shell/builtins/, $(BUILTINS))) \
