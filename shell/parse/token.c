@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 23:08:53 by hetan             #+#    #+#             */
+/*   Updated: 2024/11/25 23:08:54 by hetan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	ft_next_alloc(char *line, int *i)
@@ -27,14 +39,10 @@ static int	ft_next_alloc(char *line, int *i)
 	return (j - count + 1);
 }
 
-static t_token	*ft_next_token(char *line, int *i)
+static t_token	*ft_create_token(char *line, int *i, int j, char c)
 {
 	t_token	*token;
-	int		j;
-	char	c;
 
-	j = 0;
-	c = ' ';
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
@@ -57,6 +65,11 @@ static t_token	*ft_next_token(char *line, int *i)
 	}
 	token->str[j] = '\0';
 	return (token);
+}
+
+static t_token	*ft_next_token(char *line, int *i)
+{
+	return (ft_create_token(line, i, 0, ' '));
 }
 
 void	ft_type_arg(t_token *token, int separator)
@@ -82,6 +95,29 @@ void	ft_type_arg(t_token *token, int separator)
 		token->type = ARG;
 }
 
+void	ft_adjust_token_links(t_token *token, t_token *prev, t_meta *minishell)
+{
+	token->prev->next = token->next;
+	if (token->next)
+		token->next->prev = token->prev;
+	token->prev = prev;
+	if (prev)
+		token->next = prev->next;
+	else
+		token->next = minishell->start;
+	if (!prev)
+		prev = token;
+	prev->next->prev = token;
+	if (minishell->start->prev)
+		prev->next = prev->next;
+	else
+		prev->next = token;
+	if (minishell->start->prev)
+		minishell->start = minishell->start->prev;
+	else
+		minishell->start = minishell->start;
+}
+
 void	ft_squish_args(t_meta *minishell)
 {
 	t_token	*token;
@@ -95,28 +131,24 @@ void	ft_squish_args(t_meta *minishell)
 		{
 			while (!ft_islast_validarg(prev))
 				prev = prev->prev;
-			token->prev->next = token->next;
-			if (token->next)
-				token->next->prev = token->prev;
-			token->prev = prev;
-			if (prev)
-				token->next = prev->next;
-			else
-				token->next = minishell->start;
-			if (!prev)
-				prev = token;
-			prev->next->prev = token;
-			if (minishell->start->prev)
-				prev->next = prev->next;
-			else
-				prev->next = token;
-			if (minishell->start->prev)
-				minishell->start = minishell->start->prev;
-			else
-				minishell->start = minishell->start;
+			ft_adjust_token_links(token, prev, minishell);
 		}
 		token = token->next;
 	}
+}
+
+static void	ft_process_token(char *line, int *i, t_token **prev, t_token **next)
+{
+	int	sep;
+
+	sep = ft_ignore_sep(line, *i);
+	*next = ft_next_token(line, i);
+	(*next)->prev = *prev;
+	if (*prev)
+		(*prev)->next = *next;
+	*prev = *next;
+	ft_type_arg(*next, sep);
+	ft_skip_whitespace(line, i);
 }
 
 t_token	*ft_get_tokens(char *line)
@@ -124,7 +156,6 @@ t_token	*ft_get_tokens(char *line)
 	t_token	*prev;
 	t_token	*next;
 	int		i;
-	int		sep;
 
 	i = 0;
 	prev = NULL;
@@ -133,16 +164,7 @@ t_token	*ft_get_tokens(char *line)
 		return (NULL);
 	ft_skip_whitespace(line, &i);
 	while (line[i])
-	{
-		sep = ft_ignore_sep(line, i);
-		next = ft_next_token(line, &i);
-		next->prev = prev;
-		if (prev)
-			prev->next = next;
-		prev = next;
-		ft_type_arg(next, sep);
-		ft_skip_whitespace(line, &i);
-	}
+		ft_process_token(line, &i, &prev, &next);
 	if (next)
 		next->next = NULL;
 	while (next && next->prev)

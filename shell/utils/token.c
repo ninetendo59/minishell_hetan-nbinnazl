@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 22:24:43 by hetan             #+#    #+#             */
+/*   Updated: 2024/11/25 22:24:44 by hetan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_token	*ft_sep(t_token *token, int skip, int next)
@@ -29,7 +41,7 @@ t_token	*ft_next_run(t_token *token, int skip)
 		if (token && token->type == CMD && token->prev->type < END)
 			token = token->next;
 		else if (token && token->type == CMD && token->prev == NULL)
-			;
+			continue ;
 	}
 	return (token);
 }
