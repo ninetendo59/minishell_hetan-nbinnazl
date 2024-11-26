@@ -38,6 +38,6 @@ char	*get_next_line(int fd);//the main function of gnl
 char	*gnl_get_fd(char *storage, int fd);//read the opened fd
 char	*gnl_store_data(char *storage);//clean the unecessary value
 char	*gnl_get_line(char *storage);//extracting 
-char	*gnl_free_storage(char	**storage);//free the mem of str that used by line
+char	*gnl_free_storage(char	**storage);//free mem of str that used by line
 
 #endif

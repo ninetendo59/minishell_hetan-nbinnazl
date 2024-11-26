@@ -16,7 +16,7 @@ static char	*ft_alloc_with_spaces(char *line)
 			count++;
 		i++;
 	}
-	new = malloc(sizeof(char) * (i + 2 * count + 1));
+	new = malloc((i + 2 * count + 1));
 	if (!new)
 		return (NULL);
 	return (new);
@@ -75,17 +75,16 @@ void	ft_parse_input(t_meta *minishell)
 		ft_putstr_fd("🔴 ", 2);
 	else
 		ft_putstr_fd("🟢 ", 2);
-	ft_putstr_fd("\033[0;36m\033[1mMINISHELL ▸ \033[0m", 2);
-	minishell->exit = 1;
-	if (ft_get_next_line(0, &line) == -2 && minishell->exit)
+	ft_putstr_fd("\033[0;36m\033[1mMINISHELL: \033[0m", 2);
+	if (ft_get_next_line(0, &line) == -2)
+	{
+		minishell->exit = 1;
 		ft_putendl_fd("exit", 2);
+	}
 	if (g_sig.sigint == 1)
 		minishell->ret = g_sig.exit_stat;
-	else
-		minishell->ret = minishell->ret;
 	if (ft_check_quotes(minishell, &line))
 		return ;
-	
 	line = ft_proc_spaces(line);
 	if (line && line[0] == '$')
 		line[0] = (char)(-line[0]);

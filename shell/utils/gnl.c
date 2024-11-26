@@ -1,145 +1,97 @@
 #include "minishell.h"
 
-char	*sh_free_storage(char **storage)
+int	ft_newline_check(char *stack, int read_size)
 {
-	free(*storage);
-	*storage = NULL;
-	return (NULL);
+	int	i;
+
+	i = 0;
+	if (read_size == 0 && stack[0] == '\0')
+		return (2);
+	if (read_size == 0 || stack == NULL)
+		return (0);
+	while (stack[i] != '\0')
+	{
+		if (stack[i] == '\n')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
-char	*sh_store_data(char *storage)
+char	*ft_buff_join(char *stack, char *buf)
 {
+	int		i;
+	int		j;
 	char	*new;
-	char	*strchr_nl;
-	size_t	line_len;
-	size_t	stor_len;
 
-	strchr_nl = gnl_strchr(storage, '\n');
-	if (!strchr_nl)
-	{
-		new = NULL;
-		return (sh_free_storage(&storage));
-	}
-	else
-		line_len = (size_t)(strchr_nl - storage) + 1;
-	if (!*(storage + line_len))
-		return (sh_free_storage (&storage));
-	stor_len = ft_strlen(storage) - line_len;
-	new = gnl_substr(storage, line_len, stor_len);
-	sh_free_storage(&storage);
+	i = 0;
+	j = 0;
+	while (stack != NULL && stack[i] != '\0')
+		i++;
+	while (buf[j] != '\0')
+		j++;
+	new = malloc((i + j + 1));
 	if (!new)
-		return (NULL);
+		return (ft_memdel(stack));
+	i = 0;
+	j = 0;
+	while (stack != NULL && stack[i] != '\0')
+		new[i++] = stack[j++];
+	j = 0;
+	while (buf[j] != '\0')
+		new[i++] = buf[j++];
+	new[i] = '\0';
+	if (stack != NULL)
+		ft_memdel(stack);
 	return (new);
 }
 
-char	*sh_get_line(char *storage)
+char	*ft_trim(char *stack)
 {
-	char	*line;
-	char	*strchr_nl;
-	size_t	line_len;
+	int		i;
+	int		j;
+	char	*trim;
 
-	strchr_nl = gnl_strchr(storage, '\n');
-	line_len = (size_t)(strchr_nl - storage) + 1;
-	line = gnl_substr(storage, 0, line_len);
+	i = 0;
+	j = 0;
+	while (stack[i] != '\n' && stack[i] != '\0')
+		i++;
+	while (stack[i++] != '\0')
+		j++;
+	trim = malloc(j + 1);
+	if (!trim)
+		return (ft_memdel(stack));
+	i = 0;
+	j = 0;
+	while (stack[i] != '\n' && stack[i] != '\0')
+		i++;
+	if (stack[i] == '\0')
+		i--;
+	i++;
+	while (stack[i] != '\0')
+		trim[j++] = stack[i++];
+	trim[j] = '\0';
+	ft_memdel(stack);
+	return (trim);
+}
+
+char	*ft_get_line(char *stack)
+{
+	int		i;
+	char	*line;
+
+	i = 0;
+	while (stack[i] != '\n' && stack[i] != '\0')
+		i++;
+	line = malloc(i + 1);
 	if (!line)
-		return (NULL);
+		return (ft_memdel(stack));
+	i = 0;
+	while (stack[i] != '\n' && stack[i] != '\0')
+	{
+		line[i] = stack[i];
+		i++;
+	}
+	line[i] = '\0';
 	return (line);
 }
-
-char	*sh_get_fd(char *storage, int fd, int *ret)
-{
-	char	*buffer;
-	int		rd;
-
-	buffer = malloc (sizeof(*buffer) * ((long int)BUFFER_SIZE + 1));
-	if (!buffer)
-		return (*ret = -1, sh_free_storage (&storage));
-	*buffer = '\0';
-	rd = 1;
-	while (rd > 0 && !(gnl_strchr(buffer, '\n')))
-	{
-		rd = read(fd, buffer, BUFFER_SIZE);
-		if (rd > 0)
-		{
-			*(buffer + rd) = '\0';
-			storage = gnl_strjoin(storage, buffer);
-		}
-	}
-	free(buffer);
-	if (rd < 0)
-		return (*ret = -1, sh_free_storage (&storage));
-	return (storage);
-}
-
-// int	ft_newline_check(char *stock, int read_size)
-// {
-// 	printf("%d", read_size);
-// 	if (read_size == 0)
-// 	{
-// 		if (stock[0] == '\0')
-// 			return (2);
-// 		else
-// 			return (0);
-// 	}
-// 	printf("%s\n", stock);
-// 	while (*stock)
-// 	{
-// 		if (*stock == '\n')
-// 			return (1);
-// 		stock++;
-// 	}
-// 	return (0);
-// }
-
-// char	*ft_buff_join(char *stock, char *buff)
-// {
-// 	int		stock_len;
-// 	int		buff_len;
-// 	char	*new;
-
-// 	stock_len = 0;
-// 	buff_len = ft_strlen(buff);
-// 	if (stock)
-// 		stock_len = ft_strlen(stock);
-// 	new = malloc(stock_len + buff_len + 1);
-// 	if (!new)
-// 		return (ft_memdel(stock), NULL);
-// 	if (stock)
-// 	{
-// 		ft_memcpy(new, stock, stock_len);
-// 		ft_memdel(stock);
-// 	}
-// 	ft_memcpy(new + stock_len, buff, buff_len + 1);
-// 	return (new);
-// }
-
-// char	*ft_stock_trim(char *stock)
-// {
-// 	int		i;
-// 	char	*trimmed;
-
-// 	i = 0;
-// 	while (stock[i] != '\n' && stock[i] != '\0')
-// 		i++;
-// 	if (stock[i] == '\0')
-// 		return (ft_memdel(stock));
-// 	trimmed = ft_strdup(stock + i + 1);
-// 	ft_memdel(stock);
-// 	return (trimmed);
-// }
-
-// char	*ft_get_line(char *stock)
-// {
-// 	int		i;
-// 	char	*line;
-
-// 	i = 0;
-// 	while (stock[i] && stock[i] != '\n')
-// 		i++;
-// 	line = malloc(i + 1);
-// 	if (!line)
-// 		return (NULL);
-// 	ft_memcpy(line, stock, i);
-// 	line[i] = '\0';
-// 	return (line);
-// }

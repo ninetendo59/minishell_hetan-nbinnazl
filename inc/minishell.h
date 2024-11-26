@@ -34,13 +34,12 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
-# if defined(__APPLE__) && defined (__MACH__)
-#  include <sys/syslimits.h>
-# elif defined(__linux__)
-#  include <linux/limits.h>
-#  define IS_LINUX 1
-# endif
-
+// # if defined(__APPLE__) && defined (__MACH__)
+// #  include <sys/syslimits.h>
+// # elif defined(__linux__)
+// #  include <linux/limits.h>
+// #  define IS_LINUX 1
+// # endif
 
 /* ************************************************************************** */
 /*     Constant declaration.                                                  */
@@ -75,23 +74,23 @@
 typedef struct s_command
 {
 	const char		*name;
-	void 			(*func)(void);
+	void			(*func)(void);
 }	t_command;
 
-typedef struct	s_exp
+typedef struct s_exp
 {
 	char			*new_arg;
 	int				i;
 	int				j;
 }	t_exp;
 
-typedef struct	s_env
+typedef struct s_env
 {
 	char			*value;
 	struct s_env	*next;
 }	t_env;
 
-typedef struct	s_token
+typedef struct s_token
 {
 	int				type;
 	char			*str;
@@ -125,16 +124,16 @@ typedef struct s_meta
 	int		parent;
 	int		last;
 	int		no_exec;
-}   t_meta;
+}	t_meta;
 
 typedef struct s_cwd
 {
-	char *cwd;
-	char *home;
-	char *disp;
+	char	*cwd;
+	char	*home;
+	char	*disp;
 }	t_cwd;
 
-typedef struct	s_sig
+typedef struct s_sig
 {
 	int				sigint;
 	int				sigquit;
@@ -176,16 +175,16 @@ void	ft_free_env(t_env *env);
 /*     gnl                                                                    */
 /* ************************************************************************** */
 
-// int		ft_newline_check(char *stock, int read_size);
+int		ft_newline_check(char *stock, int read_size);
 
-// char	*ft_buff_join(char *stock, char *buff);
-// char	*ft_stock_trim(char *stock);
-// char	*ft_get_line(char *stock);
+char	*ft_buff_join(char *stock, char *buff);
+char	*ft_trim(char *stock);
+char	*ft_get_line(char *stock);
 
-char	*sh_free_storage(char **storage);
-char	*sh_store_data(char *storage);
-char	*sh_get_line(char *storage);
-char	*sh_get_fd(char *storage, int fd, int *ret);
+// char	*sh_free_storage(char **storage);
+// char	*sh_store_data(char *storage);
+// char	*sh_get_line(char *storage);
+// char	*sh_get_fd(char *storage, int fd, int *ret);
 
 /* ************************************************************************** */
 /*     minishell                                                              */
@@ -270,7 +269,7 @@ char	**ft_cmd_tab(t_token *start);
 /* ************************************************************************** */
 
 /* ************************************************************************** */
-/*     expansion                                                                   */
+/*     expansion                                                              */
 /* ************************************************************************** */
 
 char	*ft_expansions(char *arg, t_env *env, int ret);
@@ -289,7 +288,6 @@ void	ft_type_arg(t_token *token, int separator);
 void	ft_squish_args(t_meta *minishell);
 
 t_token	*ft_get_tokens(char *line);
-
 
 /* ************************************************************************** */
 /*     BUILTINS                                                               */
@@ -403,6 +401,6 @@ int		minipipe(t_meta *minishell);
 /*     EXTENDS                                                                */
 /* ************************************************************************** */
 
-extern	t_sig	g_sig;
+extern t_sig	g_sig;
 
 #endif

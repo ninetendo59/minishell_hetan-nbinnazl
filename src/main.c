@@ -51,8 +51,8 @@ t_sig	g_sig;
 // 	free(cwd);
 // }
 
-void	ft_init_list(t_meta *dat)
-{
+// void	ft_init_list(t_meta *dat)
+// {
 	// dat->cmd = malloc(sizeof(*dat->cmd) * (BUFFER_SIZE + 1));
 	// dat->dir = malloc(sizeof(*dat->dir) + 1);
 	// dat->len = 0;
@@ -65,55 +65,72 @@ void	ft_init_list(t_meta *dat)
 	// dat->exit = 0;
 	// dat->ret = 0;
 	// dat->no_exec = 0;
-	dat->in = dup(0);
-	dat->out = dup(1);
-	dat->env = NULL;
-	dat->secret_env = NULL;
+	// dat->in = dup(0);
+	// dat->out = dup(1);
+	// dat->env = NULL;
+	// dat->secret_env = NULL;
 	// dat->pipe = 0;
-}
+// }
 
 int	main(int argc, char **argv, char **env)
 {
-	// static char	*last_cmd;
+	static char	*last_cmd;
 	t_meta		dat;
 
 	(void)argc;
 	(void)argv;
 	// ft_init_signal();
-	ft_init_list(&dat);
+	// ft_parse_input(&dat);
+	// ft_init_list(&dat);
+	dat.in = dup(0);
+	dat.out = dup(1);
+	dat.exit = 0;
+	dat.ret = 0;
+	dat.no_exec = 0;
 	ft_reset_fds(&dat);
 	ft_init_env(&dat, env);
 	ft_init_secret_env(&dat, env);
 	ft_lvl_increment(dat.env);
-	// last_cmd = NULL;
-	// if (!dat.cmd || !dat.dir)
-	// 	exit(1);
+	last_cmd = NULL;
+	if (!dat.cmd || !dat.dir)
+		exit(1);
 	// curr_dir();
 	while (dat.exit == 0)
 	{
 		// curr_dir();
 		// dat.cmd = readline("");
 
+        // char buffer[3] = {0};
+        // read(STDIN_FILENO, buffer, 3);
+
+        // if (buffer[0] == '\033' && buffer[1] == '[') {
+        //     switch (buffer[2]) {
+        //         case 'A': read_history(dat.cmd); break;
+        //         case 'B': printf("Down arrow pressed\n"); break;
+        //         case 'C': printf("Right arrow pressed\n"); break;
+        //         case 'D': printf("Left arrow pressed\n"); break;
+        //     }
+		// }
 		ft_init_signal();
 		ft_parse_input(&dat);
 		if (dat.start != NULL && ft_check_line(&dat, dat.start))
 			ft_minishell(&dat);
 		ft_free_token(dat.start);
 
-		// if (!dat.cmd || !strcmp(dat.cmd, "exit"))
-		// 	exit(0);
-		// if ((!last_cmd || ft_strcmp(last_cmd, dat.cmd) != 0) && IS_LINUX)
-		// {
-		// 	add_history(dat.cmd);
-		// 	free(last_cmd);
-		// 	last_cmd = ft_strdup(dat.cmd);
-		// }
-		// else if (!IS_LINUX)
-		// 	add_history(dat.cmd);
+		if (!dat.cmd || !strcmp(dat.cmd, "exit"))
+			exit(0);
+		if ((!last_cmd || ft_strcmp(last_cmd, dat.cmd) != 0) && IS_LINUX)
+		{
+			add_history(dat.cmd);
+			free(last_cmd);
+			last_cmd = ft_strdup(dat.cmd);
+		}
+		else if (!IS_LINUX)
+			add_history(dat.cmd);
 		// *dat.cmd = '\0';
 	}
 	ft_free_env(dat.env);
 	ft_free_env(dat.secret_env);
-	// free(last_cmd);
+	free(last_cmd);
 	exit(dat.ret);
 }

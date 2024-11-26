@@ -31,8 +31,6 @@ int	ft_quotes(char *line, int index)
 		return (0);
 	while (line[i] && i < index)
 	{
-		// if (i > 0 && line[i - 1] == '\\')
-		// 	;
 		if (open == 0 && line[i] == '\"')
 			open = 1;
 		else if (open == 0 && line[i] == '\'')

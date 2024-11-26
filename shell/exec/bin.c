@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	ft_error_msg(char *path)
+int	error_message(char *path)
 {
 	DIR	*folder;
 	int	fd;
@@ -12,42 +12,40 @@ int	ft_error_msg(char *path)
 	ft_putstr_fd(path, 2);
 	if (ft_strchr(path, '/') == NULL)
 		ft_putendl_fd(": command not found", 2);
-	else if (fd == -1)
-	{
-		if (folder == NULL)
-			ft_putendl_fd(": There is no such file or directory", 2);
-		else if (folder != NULL)
-			ft_putendl_fd(": is a directory", 2);
-	}
 	else if (fd == -1 && folder == NULL)
+		ft_putendl_fd(": No such file or directory", 2);
+	else if (fd == -1 && folder != NULL)
+		ft_putendl_fd(": is a directory", 2);
+	else if (fd != -1 && folder == NULL)
 		ft_putendl_fd(": Permission denied", 2);
-	ret = 126;
 	if (ft_strchr(path, '/') == NULL || (fd == -1 && folder == NULL))
 		ret = 127;
+	else
+		ret = 126;
 	if (folder)
 		closedir(folder);
 	ft_close(fd);
 	return (ret);
 }
 
-int	ft_mgc_box(char *path, char **args, t_env *env, t_meta *minishell)
+int	ft_mgc_box(char *path, char **args, t_env *env, t_meta *mini)
 {
 	char	**env_array;
-	char	*env_str;
+	char	*ptr;
 	int		ret;
 
 	ret = 0;
 	g_sig.pid = fork();
 	if (g_sig.pid == 0)
 	{
-		env_str = ft_envto_str(env);
-		env_array = ft_split(env_str, '\n');
-		ft_memdel(env_str);
+		ptr = ft_envto_str(env);
+		env_array = ft_split(ptr, '\n');
+		ft_memdel(ptr);
 		if (ft_strchr(path, '/') != NULL)
 			execve(path, args, env_array);
-		ret = ft_error_msg(path);
+		ret = error_message(path);
 		ft_free_tab(env_array);
-		ft_free_token(minishell->start);
+		ft_free_token(mini->start);
 		exit(ret);
 	}
 	else
@@ -55,11 +53,13 @@ int	ft_mgc_box(char *path, char **args, t_env *env, t_meta *minishell)
 	if (g_sig.sigint == 1 || g_sig.sigquit == 1)
 		return (g_sig.exit_stat);
 	if (ret == 32256 || ret == 32512)
-		return (ret / 256);
-	return (!!ret);
+		ret = ret / 256;
+	else
+		ret = !!ret;
+	return (ret);
 }
 
-char	*ft_join_path(const char *s1, const char *s2)
+char	*ft_path_join(const char *s1, const char *s2)
 {
 	char	*tmp;
 	char	*path;
@@ -81,29 +81,29 @@ char	*ft_check_dir(char *bin, char *command)
 	if (!folder)
 		return (NULL);
 	item = readdir(folder);
-	while (item)
+	while ((item))
 	{
 		if (ft_strcmp(item->d_name, command) == 0)
-			path = ft_join_path(bin, item->d_name);
+			path = ft_path_join(bin, item->d_name);
+		item = readdir(folder);
 	}
 	closedir(folder);
 	return (path);
 }
 
-int	ft_exec_bin(char **args, t_env *env, t_meta *minishell)
+int	ft_exec_bin(char **args, t_env *env, t_meta *mini)
 {
+	int		i;
 	char	**bin;
 	char	*path;
 	int		ret;
-	int		i;
 
 	i = 0;
 	ret = 127;
-	// path = NULL;
 	while (env && env->value && ft_strncmp(env->value, "PATH=", 5) != 0)
 		env = env->next;
 	if (env == NULL || env->next == NULL)
-		return (ft_mgc_box(args[0], args, env, minishell));
+		return (ft_mgc_box(args[0], args, env, mini));
 	bin = ft_split(env->value, ':');
 	if (!args[0] && !bin[0])
 		return (1);
@@ -112,9 +112,9 @@ int	ft_exec_bin(char **args, t_env *env, t_meta *minishell)
 	while (args[0] && bin[i] && path == NULL)
 		path = ft_check_dir(bin[i++], args[0]);
 	if (path != NULL)
-		ret = ft_mgc_box(path, args, env, minishell);
+		ret = ft_mgc_box(path, args, env, mini);
 	else
-		ret = ft_mgc_box(args[0], args, env, minishell);
+		ret = ft_mgc_box(args[0], args, env, mini);
 	ft_free_tab(bin);
 	ft_memdel(path);
 	return (ret);

@@ -12,6 +12,59 @@
 
 #include "minishell.h"
 
+void	ft_type_arg(t_token *token, int separator)
+{
+	if (ft_strcmp(token->str, "") == 0)
+		token->type = EMPTY;
+	else if (separator == 0 && ft_strcmp(token->str, ">") == 0)
+		token->type = TRUNC;
+	else if (separator == 0 && ft_strcmp(token->str, ">>") == 0)
+		token->type = APPEND;
+	else if (separator == 0 && ft_strcmp(token->str, "<") == 0)
+		token->type = INPUT;
+	else if (separator == 0 && ft_strcmp(token->str, "|") == 0)
+		token->type = PIPE;
+	else if (separator == 0 && ft_strcmp(token->str, ";") == 0)
+		token->type = END;
+	else if (token->prev == NULL || token->prev->type >= TRUNC)
+		token->type = CMD;
+	else
+		token->type = ARG;
+}
+
+void	ft_squish_args(t_meta *mini)
+{
+	t_token	*token;
+	t_token	*prev;
+
+	token = mini->start;
+	while (token)
+	{
+		prev = ft_sep(token, 0, 0);
+		if (ft_istype(token, ARG) && ft_istypes(prev, "TAI"))
+		{
+			while (ft_islast_validarg(prev) == 0)
+				prev = prev->prev;
+			token->prev->next = token->next;
+			if (token->next)
+				token->next->prev = token->prev;
+			token->prev = prev;
+			if (prev)
+				token->next = prev->next;
+			else
+				token->next = mini->start;
+			if (!prev)
+				prev = token;
+			prev->next->prev = token;
+			if (!(mini->start->prev))
+				prev->next = token;
+			if (mini->start->prev)
+				mini->start = mini->start->prev;
+		}
+		token = token->next;
+	}
+}
+
 static int	ft_next_alloc(char *line, int *i)
 {
 	int		count;
@@ -39,10 +92,14 @@ static int	ft_next_alloc(char *line, int *i)
 	return (j - count + 1);
 }
 
-static t_token	*ft_create_token(char *line, int *i, int j, char c)
+t_token	*ft_next_token(char *line, int *i)
 {
 	t_token	*token;
+	int		j;
+	char	c;
 
+	j = 0;
+	c = ' ';
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
@@ -67,104 +124,28 @@ static t_token	*ft_create_token(char *line, int *i, int j, char c)
 	return (token);
 }
 
-static t_token	*ft_next_token(char *line, int *i)
-{
-	return (ft_create_token(line, i, 0, ' '));
-}
-
-void	ft_type_arg(t_token *token, int separator)
-{
-	if (*token->str == '\0')
-		token->type = EMPTY;
-	else if (separator == 0)
-	{
-		if (ft_strcmp(token->str, ">") == 0)
-			token->type = TRUNC;
-		else if (ft_strcmp(token->str, ">>") == 0)
-			token->type = APPEND;
-		else if (ft_strcmp(token->str, "<") == 0)
-			token->type = INPUT;
-		else if (ft_strcmp(token->str, "|") == 0)
-			token->type = PIPE;
-		else if (ft_strcmp(token->str, ";") == 0)
-			token->type = END;
-	}
-	else if (token->prev == NULL || token->prev->type >= TRUNC)
-		token->type = CMD;
-	else
-		token->type = ARG;
-}
-
-void	ft_adjust_token_links(t_token *token, t_token *prev, t_meta *minishell)
-{
-	token->prev->next = token->next;
-	if (token->next)
-		token->next->prev = token->prev;
-	token->prev = prev;
-	if (prev)
-		token->next = prev->next;
-	else
-		token->next = minishell->start;
-	if (!prev)
-		prev = token;
-	prev->next->prev = token;
-	if (minishell->start->prev)
-		prev->next = prev->next;
-	else
-		prev->next = token;
-	if (minishell->start->prev)
-		minishell->start = minishell->start->prev;
-	else
-		minishell->start = minishell->start;
-}
-
-void	ft_squish_args(t_meta *minishell)
-{
-	t_token	*token;
-	t_token	*prev;
-
-	token = minishell->start;
-	while (token)
-	{
-		prev = ft_sep(token, 0, 0);
-		if (ft_istype(token, ARG) && ft_istypes(prev, "TAI"))
-		{
-			while (!ft_islast_validarg(prev))
-				prev = prev->prev;
-			ft_adjust_token_links(token, prev, minishell);
-		}
-		token = token->next;
-	}
-}
-
-static void	ft_process_token(char *line, int *i, t_token **prev, t_token **next)
-{
-	int	sep;
-
-	sep = ft_ignore_sep(line, *i);
-	*next = ft_next_token(line, i);
-	(*next)->prev = *prev;
-	if (*prev)
-		(*prev)->next = *next;
-	*prev = *next;
-	ft_type_arg(*next, sep);
-	ft_skip_whitespace(line, i);
-}
-
 t_token	*ft_get_tokens(char *line)
 {
 	t_token	*prev;
 	t_token	*next;
 	int		i;
+	int		sep;
 
-	i = 0;
 	prev = NULL;
 	next = NULL;
-	if (!line)
-		return (NULL);
+	i = 0;
 	ft_skip_whitespace(line, &i);
 	while (line[i])
-		ft_process_token(line, &i, &prev, &next);
+	{
+		sep = ft_ignore_sep(line, i);
+		next = ft_next_token(line, &i);
+		next->prev = prev;
+		if (prev)
+			prev->next = next;
+		prev = next;
+		ft_type_arg(next, sep);
+		ft_skip_whitespace(line, &i);
+	}
 	if (next)
 		next->next = NULL;
 	while (next && next->prev)
