@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bin.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/29 01:53:25 by hetan             #+#    #+#             */
+/*   Updated: 2024/11/29 03:34:21 by hetan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	error_message(char *path)
@@ -50,13 +62,7 @@ int	ft_mgc_box(char *path, char **args, t_env *env, t_meta *mini)
 	}
 	else
 		waitpid(g_sig.pid, &ret, 0);
-	if (g_sig.sigint == 1 || g_sig.sigquit == 1)
-		return (g_sig.exit_stat);
-	if (ret == 32256 || ret == 32512)
-		ret = ret / 256;
-	else
-		ret = !!ret;
-	return (ret);
+	return (handle_signal_and_return(ret));
 }
 
 static char	*ft_path_join(const char *s1, const char *s2)

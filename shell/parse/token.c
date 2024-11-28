@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 23:08:53 by hetan             #+#    #+#             */
-/*   Updated: 2024/11/25 23:08:54 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/29 03:38:07 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,25 +42,7 @@ void	ft_squish_args(t_meta *mini)
 	{
 		prev = ft_sep(token, 0, 0);
 		if (ft_istype(token, ARG) && ft_istypes(prev, "TAI"))
-		{
-			while (ft_islast_validarg(prev) == 0)
-				prev = prev->prev;
-			token->prev->next = token->next;
-			if (token->next)
-				token->next->prev = token->prev;
-			token->prev = prev;
-			if (prev)
-				token->next = prev->next;
-			else
-				token->next = mini->start;
-			if (!prev)
-				prev = token;
-			prev->next->prev = token;
-			if (!(mini->start->prev))
-				prev->next = token;
-			if (mini->start->prev)
-				mini->start = mini->start->prev;
-		}
+			update_token_links(&token, &prev, &mini);
 		token = token->next;
 	}
 }
@@ -94,34 +76,21 @@ static int	ft_next_alloc(char *line, int *i)
 
 t_token	*ft_next_token(char *line, int *i)
 {
-	t_token	*token;
-	int		j;
-	char	c;
+	t_token_data	tok_dat;
 
-	j = 0;
-	c = ' ';
-	token = malloc(sizeof(t_token));
-	if (!token)
+	tok_dat.j = 0;
+	tok_dat.c = ' ';
+	tok_dat.i = i;
+	tok_dat.line = line;
+	tok_dat.token = malloc(sizeof(t_token));
+	if (!(tok_dat.token))
 		return (NULL);
-	token->str = malloc(ft_next_alloc(line, i));
-	if (!(token->str))
+	tok_dat.token->str = malloc(ft_next_alloc(line, i));
+	if (!(tok_dat.token->str))
 		return (NULL);
-	while (line[*i] && (line[*i] != ' ' || c != ' '))
-	{
-		if (c == ' ' && (line[*i] == '\'' || line[*i] == '\"'))
-			c = line[(*i)++];
-		else if (c != ' ' && line[*i] == c)
-		{
-			c = ' ';
-			(*i)++;
-		}
-		else if (line[*i] == '\\' && (*i)++)
-			token->str[j++] = line[(*i)++];
-		else
-			token->str[j++] = line[(*i)++];
-	}
-	token->str[j] = '\0';
-	return (token);
+	process_token_string(&tok_dat);
+	tok_dat.token->str[(tok_dat.j)] = '\0';
+	return (tok_dat.token);
 }
 
 t_token	*ft_get_tokens(char *line)

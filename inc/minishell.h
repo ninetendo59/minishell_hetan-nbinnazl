@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:52:11 by hetan             #+#    #+#             */
-/*   Updated: 2024/11/28 22:19:51 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/29 03:11:06 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,15 @@ typedef struct s_token
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
+
+typedef struct s_token_data
+{
+	char		*line;
+	int			*i;
+	char		c;
+	t_token		*token;
+	int			j;
+}	t_token_data;
 
 typedef struct s_meta
 {
@@ -219,6 +228,8 @@ int		ft_open_file(const char *path, int flags, int perms);
 
 t_token	*ft_sep(t_token *token, int skip, int next);
 t_token	*ft_next_run(t_token *token, int skip);
+void	process_token_string(t_token_data *data);
+void	update_token_links(t_token **token, t_token **prev, t_meta **mini);
 
 /* ************************************************************************** */
 /*     type                                                                   */
@@ -388,6 +399,7 @@ void	ft_print_sortedenv(t_env *env);
 void	ft_sig_int(int code);
 void	ft_sig_quit(int code);
 void	ft_init_signal(void);
+int		handle_signal_and_return(int ret);
 
 /* ************************************************************************** */
 /*     REDIR                                                                  */

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/29 01:48:26 by hetan             #+#    #+#             */
+/*   Updated: 2024/11/29 03:36:49 by hetan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 size_t	ft_size_env(t_env *lst)
@@ -14,6 +26,8 @@ size_t	ft_size_env(t_env *lst)
 	return (len);
 }
 
+// i++;
+// 				len++;
 char	*ft_envto_str(t_env *lst)
 {
 	char	*env;
@@ -30,11 +44,7 @@ char	*ft_envto_str(t_env *lst)
 		{
 			len = 0;
 			while (lst->value[len])
-			{
-				env[i] = lst->value[len];
-				i++;
-				len++;
-			}
+				env[i++] = lst->value[len++];
 		}
 		if (lst->next->next != NULL)
 			env[i++] = '\n';

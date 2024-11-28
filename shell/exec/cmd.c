@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/29 01:53:31 by hetan             #+#    #+#             */
+/*   Updated: 2024/11/29 03:35:09 by hetan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	**ft_cmd_tab(t_token *start)
@@ -6,21 +18,17 @@ char	**ft_cmd_tab(t_token *start)
 	char	**tab;
 	int		count;
 
-	count = 2;
 	if (!start)
 		return (NULL);
-	token = start->next;
-	while (token && token->type < TRUNC)
-	{
-		token = token->next;
-		count++;
-	}
-	tab = malloc(sizeof(char *) * count);
+	tab = malloc(sizeof(char *));
 	if (!tab)
 		return (NULL);
+	count = 1;
+	token = start->next;
+	while (token && token->type < TRUNC)
+		token = token->next;
 	token = start->next;
 	tab[0] = start->str;
-	count = 1;
 	while (token && token->type < TRUNC)
 	{
 		tab[count++] = token->str;
@@ -28,6 +36,13 @@ char	**ft_cmd_tab(t_token *start)
 	}
 	tab[count] = NULL;
 	return (tab);
+}
+
+static void	ass_pipe(t_meta **minishell)
+{
+	(*minishell)->pipein = -1;
+	(*minishell)->pipeout = -1;
+	(*minishell)->charge = 0;
 }
 
 void	ft_exec_cmd(t_meta *minishell, t_token *token)
@@ -56,7 +71,5 @@ void	ft_exec_cmd(t_meta *minishell, t_token *token)
 	ft_free_tab(cmd);
 	ft_close(minishell->pipein);
 	ft_close(minishell->pipeout);
-	minishell->pipein = -1;
-	minishell->pipeout = -1;
-	minishell->charge = 0;
+	ass_pipe(&minishell);
 }

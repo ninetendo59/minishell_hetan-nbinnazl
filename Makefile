@@ -7,7 +7,7 @@ HEADER 		=	inc
 BUILTINS	=	cd echo env exit export pwd unset
 ENV			=	env get shlvl sort
 EXEC		=	bin builtin cmd
-PARSE		=	expansion line token
+PARSE		=	expansion line token token_data
 UTILS		=	expansion fd free gnl minishell parse token type utils
 MINI		=	main rd_cmd signalling
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/29 03:02:04 by hetan             #+#    #+#             */
+/*   Updated: 2024/11/29 03:04:20 by hetan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_redir_and_exec(t_meta *minishell, t_token *token)
@@ -24,6 +36,13 @@ void	ft_redir_and_exec(t_meta *minishell, t_token *token)
 		ft_exec_cmd(minishell, token);
 }
 
+static void	shell_info(t_meta **minishell)
+{
+	(*minishell)->charge = 1;
+	(*minishell)->parent = 1;
+	(*minishell)->last = 1;
+}
+
 void	ft_minishell(t_meta *minishell)
 {
 	t_token	*token;
@@ -34,9 +53,7 @@ void	ft_minishell(t_meta *minishell)
 		token = minishell->start->next;
 	while (minishell->exit == 0 && token)
 	{
-		minishell->charge = 1;
-		minishell->parent = 1;
-		minishell->last = 1;
+		shell_info(&minishell);
 		ft_redir_and_exec(minishell, token);
 		ft_reset_std(minishell);
 		ft_close_fds(minishell);
