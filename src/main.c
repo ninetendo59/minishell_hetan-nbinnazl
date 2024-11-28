@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:30:52 by hetan             #+#    #+#             */
-/*   Updated: 2024/11/28 12:08:45 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/28 22:30:49 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,18 +131,6 @@ int	main(int argc, char **argv, char **env)
 	{
 		// curr_dir();
 		// dat.cmd = readline("");
-
-        // char buffer[3] = {0};
-        // read(STDIN_FILENO, buffer, 3);
-
-        // if (buffer[0] == '\033' && buffer[1] == '[') {
-        //     switch (buffer[2]) {
-        //         case 'A': read_history(dat.cmd); break;
-        //         case 'B': printf("Down arrow pressed\n"); break;
-        //         case 'C': printf("Right arrow pressed\n"); break;
-        //         case 'D': printf("Left arrow pressed\n"); break;
-        //     }
-		// }
 		ft_init_signal();
 		ft_parse_input(&dat);
 		if (dat.start != NULL && ft_check_line(&dat, dat.start))

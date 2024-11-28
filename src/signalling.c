@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 23:49:05 by hetan             #+#    #+#             */
-/*   Updated: 2024/09/08 14:11:50 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/28 22:53:45 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,22 @@
 void	ft_sig_int(int code)
 {
 	(void)code;
+    
 	if (g_sig.pid == 0)
 	{
-		ft_putstr_fd("\b\b\n", 2);
-		// ft_putstr_fd("\033[0;31m🔴 MINISHELL: \033[0m", 2);
-		// ft_putstr_fd("\n[2K\r", 2);
-		ft_putstr_fd("\033[0;36m\033[1m🔴 MINISHELL: \033[0m", 2);
-		// ft_putstr_fd("\n[2K\r\033[0;36m\033[1m🔴 MINISHELL: \033[0m", 2);
-		// ft_putstr_fd("\033[2K\r\033[0;31m🔴 MINISHELL: \033[0m", 2);
-		g_sig.exit_stat = 130;
-		g_sig.sigint = 1;
+		write(1, "\n", 1);
+		write(1, "\033[0;31m🔴 ", ft_strlen("\033[0;31m🔴"));
+		// write(1, "\033[0;36m\033[1m🔴 MINISHELL: \033[0m",
+		// ft_strlen("\033[0;36m\033[1m🔴 MINISHELL: \033[0m"));
 	}
 	else
 	{
 		ft_putstr_fd("\n", 2);
 		g_sig.exit_stat = 130;
 	}
+	rl_on_new_line();
+	rl_replace_line("", 1);
+	rl_redisplay();
 	g_sig.sigint = 1;
 }
 

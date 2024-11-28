@@ -144,20 +144,24 @@ static int	ft_check_quotes(t_meta *minishell, char **line)
 
 void	ft_parse_input(t_meta *minishell)
 {
-	char			*line;
 	t_token			*token;
-	char			*prompt;
+	// char			*prompt;
 
-	line = NULL;
-	prompt = NULL;
+	minishell->cmd = NULL;
+	// prompt = NULL;
 	signal(SIGINT, &ft_sig_int);
 	signal(SIGQUIT, &ft_sig_quit);
-	if (minishell->ret)
-		prompt = "\033[0;31m🔴 \033[0;36m\033[1mMINISHELL: \033[0m";
+	// 	prompt = "\033[0;31m🔴 \033[0;36m\033[1mMINISHELL: \033[0m";
+	// else
+	if (!minishell->ret)
+		write(1, "\033[0;32m🟢", ft_strlen("\033[0;32m🟢"));
 	else
-		prompt = "\033[0;32m🟢 \033[0;36m\033[1mMINISHELL: \033[0m";
-	line = readline(prompt);
-	if (!line)
+		write(1, "\033[0;31m🔴 ", ft_strlen("\033[0;31m🔴"));
+	if (g_sig.sigint == 1)
+		minishell->ret = 1;
+	minishell->cmd = readline("\033[0;36m\033[1mMINISHELL: \033[0m");
+	// line = readline(prompt);
+	if (!minishell->cmd)
 	{
 		// ft_putstr_fd("\033[2K\rexit\n", 2);
 		minishell->exit = 1;
@@ -166,17 +170,17 @@ void	ft_parse_input(t_meta *minishell)
 		
 		return;
 	}
-	if (*line)
-		add_history(line);
+	if (*minishell->cmd)
+		add_history(minishell->cmd);
 	if (g_sig.sigint == 1)
 		minishell->ret = g_sig.exit_stat;
-	if (ft_check_quotes(minishell, &line))
+	if (ft_check_quotes(minishell, &(minishell->cmd)))
 		return;
-	line = ft_proc_spaces(line);
-	if (line && line[0] == '$')
-		line[0] = (char)(-line[0]);
-	minishell->start = ft_get_tokens(line);
-	ft_memdel(line);
+	minishell->cmd = ft_proc_spaces(minishell->cmd);
+	if (minishell->cmd && *minishell->cmd == '$')
+		*minishell->cmd = (char)(-*minishell->cmd);
+	minishell->start = ft_get_tokens(minishell->cmd);
+	ft_memdel(minishell->cmd);
 	ft_squish_args(minishell);
 	token = minishell->start;
 	while (token)
