@@ -124,9 +124,9 @@ typedef struct s_meta
 	int				parent;
 	int				last;
 	int				no_exec;
-	char			**history;
-	struct termios	orig_termios;
-	unsigned int	c_hist;
+	// char			**history;
+	// struct termios	orig_termios;
+	// unsigned int	c_hist;
 }	t_meta;
 
 typedef struct s_cwd
@@ -178,11 +178,11 @@ void	ft_free_env(t_env *env);
 /*     gnl                                                                    */
 /* ************************************************************************** */
 
-int		ft_newline_check(char *stock, int read_size);
+// int		ft_newline_check(char *stock, int read_size);
 
-char	*ft_buff_join(char *stock, char *buff);
-char	*ft_trim(char *stock);
-char	*ft_get_line(char *stock);
+// char	*ft_buff_join(char *stock, char *buff);
+// char	*ft_trim(char *stock);
+// char	*ft_get_line(char *stock);
 
 // char	*sh_free_storage(char **storage);
 // char	*sh_store_data(char *storage);
@@ -235,7 +235,7 @@ int		ft_has_pipe(t_token *token);
 void	ft_skip_whitespace(const char *str, int *i);
 
 int		ft_syntax_error(t_meta *minishell, char *token_str);
-int		ft_get_next_line(int fd, char **line);
+// int		ft_get_next_line(int fd, char **line);
 
 /* ************************************************************************** */
 /*     EXECUTE                                                                */
@@ -245,11 +245,9 @@ int		ft_get_next_line(int fd, char **line);
 /*     bin                                                                    */
 /* ************************************************************************** */
 
-int		ft_error_msg(char *path);
 int		ft_mgc_box(char *path, char **args, t_env *env, t_meta *mini);
 int		ft_exec_bin(char **args, t_env *env, t_meta *mini);
 
-char	*ft_join_path(const char *s1, const char *s2);
 char	*ft_check_dir(char *bin, char *command);
 
 /* ************************************************************************** */

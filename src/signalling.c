@@ -31,8 +31,14 @@ void	ft_sig_int(int code)
 	(void)code;
 	if (g_sig.pid == 0)
 	{
-		ft_putstr_fd("\b\b  \n\033[0;36m\033[1m🔴 minishell ▸ \033[0m", 2);
-		g_sig.exit_stat = 1;
+		ft_putstr_fd("\b\b\n", 2);
+		// ft_putstr_fd("\033[0;31m🔴 MINISHELL: \033[0m", 2);
+		// ft_putstr_fd("\n[2K\r", 2);
+		ft_putstr_fd("\033[0;36m\033[1m🔴 MINISHELL: \033[0m", 2);
+		// ft_putstr_fd("\n[2K\r\033[0;36m\033[1m🔴 MINISHELL: \033[0m", 2);
+		// ft_putstr_fd("\033[2K\r\033[0;31m🔴 MINISHELL: \033[0m", 2);
+		g_sig.exit_stat = 130;
+		g_sig.sigint = 1;
 	}
 	else
 	{

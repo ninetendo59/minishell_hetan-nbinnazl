@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	error_message(char *path)
+static int	error_message(char *path)
 {
 	DIR	*folder;
 	int	fd;
@@ -59,7 +59,7 @@ int	ft_mgc_box(char *path, char **args, t_env *env, t_meta *mini)
 	return (ret);
 }
 
-char	*ft_path_join(const char *s1, const char *s2)
+static char	*ft_path_join(const char *s1, const char *s2)
 {
 	char	*tmp;
 	char	*path;

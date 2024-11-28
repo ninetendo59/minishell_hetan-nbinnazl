@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-
-
 static char	*ft_alloc_with_spaces(char *line)
 {
 	int		i;
@@ -57,7 +55,7 @@ static int	ft_check_quotes(t_meta *minishell, char **line)
 {
 	if (ft_quotes(*line, INT_MAX))
 	{
-		ft_putendl_fd("minishell: syntax error with open quotes", 2);
+		ft_putendl_fd("MINISHELL: syntax error with open quotes", 2);
 		ft_memdel(*line);
 		minishell->ret = 2;
 		minishell->start = NULL;
@@ -66,36 +64,120 @@ static int	ft_check_quotes(t_meta *minishell, char **line)
 	return (0);
 }
 
+// void	ft_parse_input(t_meta *minishell)
+// {
+// 	char	*line;
+// 	t_token	*token;
+
+// 	signal(SIGINT, &ft_sig_int);
+// 	signal(SIGQUIT, &ft_sig_quit);
+// 	if (minishell->ret)
+// 		ft_putstr_fd("🔴 ", 2);
+// 	else
+// 		ft_putstr_fd("🟢 ", 2);
+// 	ft_putstr_fd("\033[0;36m\033[1mMINISHELL: \033[0m", 2);
+// 	if (ft_get_next_line(0, &line) == -2)
+// 	{
+// 		minishell->exit = 1;
+// 		ft_putendl_fd("exit", 2);
+// 	}
+// 	if (g_sig.sigint == 1)
+// 		minishell->ret = g_sig.exit_stat;
+// 	if (ft_check_quotes(minishell, &line))
+// 		return ;
+// 	line = ft_proc_spaces(line);
+// 	if (line && line[0] == '$')
+// 		line[0] = (char)(-line[0]);
+// 	minishell->start = ft_get_tokens(line);
+// 	ft_memdel(line);
+// 	ft_squish_args(minishell);
+	
+// 	token = minishell->start;
+// 	while (token)
+// 	{
+// 		if (ft_istype(token, ARG))
+// 			ft_type_arg(token, 0);
+// 		token = token->next;
+// 	}
+// }
+
+
+// void	ft_parse_input(t_meta *minishell)
+// {
+// 	char			*line;
+// 	t_token			*token;
+
+// 	signal(SIGINT, &ft_sig_int);
+// 	signal(SIGQUIT, &ft_sig_quit);
+
+// 	if (minishell->ret)
+// 		ft_putstr_fd("🔴 \033[0;36m\033[1mMINISHELL ▸ \033[0m", 2);
+// 	else
+// 		ft_putstr_fd("🟢 \033[0;36m\033[1mMINISHELL ▸ \033[0m", 2);
+// 	line = readline("");
+// 	if (!line)
+// 	{
+// 		minishell->exit = 1;
+// 		ft_putendl_fd("exit", 2);
+// 		return;
+// 	}
+// 	if (*line)
+// 		add_history(line);
+// 	if (g_sig.sigint == 1)
+// 		minishell->ret = g_sig.exit_stat;
+// 	if (ft_check_quotes(minishell, &line))
+// 		return;
+// 	line = ft_proc_spaces(line);
+// 	if (line && line[0] == '$')
+// 		line[0] = (char)(-line[0]);
+// 	minishell->start = ft_get_tokens(line);
+// 	ft_memdel(line);
+// 	ft_squish_args(minishell);
+// 	token = minishell->start;
+// 	while (token)
+// 	{
+// 		if (ft_istype(token, ARG))
+// 			ft_type_arg(token, 0);
+// 		token = token->next;
+// 	}
+// }
+
 void	ft_parse_input(t_meta *minishell)
 {
 	char			*line;
 	t_token			*token;
-	
-	
+	char			*prompt;
 
+	line = NULL;
+	prompt = NULL;
 	signal(SIGINT, &ft_sig_int);
 	signal(SIGQUIT, &ft_sig_quit);
 	if (minishell->ret)
-		ft_putstr_fd("🔴 ", 2);
+		prompt = "\033[0;31m🔴 \033[0;36m\033[1mMINISHELL: \033[0m";
 	else
-		ft_putstr_fd("🟢 ", 2);
-	ft_putstr_fd("\033[0;36m\033[1mminishell ▸ \033[0m", 2);
-	if (ft_get_next_line(0, &line) == -2)
+		prompt = "\033[0;32m🟢 \033[0;36m\033[1mMINISHELL: \033[0m";
+	line = readline(prompt);
+	if (!line)
 	{
+		// ft_putstr_fd("\033[2K\rexit\n", 2);
 		minishell->exit = 1;
-		ft_putendl_fd("exit", 2);
+		// ft_putstr_fd("\b\b", 2);
+		ft_putendl_fd("\nexit", 2);
+		
+		return;
 	}
+	if (*line)
+		add_history(line);
 	if (g_sig.sigint == 1)
 		minishell->ret = g_sig.exit_stat;
 	if (ft_check_quotes(minishell, &line))
-		return ;
+		return;
 	line = ft_proc_spaces(line);
 	if (line && line[0] == '$')
 		line[0] = (char)(-line[0]);
 	minishell->start = ft_get_tokens(line);
 	ft_memdel(line);
 	ft_squish_args(minishell);
-	
 	token = minishell->start;
 	while (token)
 	{
