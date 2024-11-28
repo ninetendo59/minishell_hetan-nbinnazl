@@ -92,7 +92,6 @@ void	ft_parse_input(t_meta *minishell)
 	line = ft_proc_spaces(line);
 	if (line && line[0] == '$')
 		line[0] = (char)(-line[0]);
-	read_history(line);
 	minishell->start = ft_get_tokens(line);
 	ft_memdel(line);
 	ft_squish_args(minishell);
