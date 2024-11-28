@@ -6,7 +6,7 @@
 /*   By: hetan <hetan@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 01:52:11 by hetan             #+#    #+#             */
-/*   Updated: 2024/11/25 02:45:41 by hetan            ###   ########.fr       */
+/*   Updated: 2024/11/28 11:45:25 by hetan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,30 +100,33 @@ typedef struct s_token
 
 typedef struct s_meta
 {
-	char	*cmd;
-	char	*dir;
-	t_env	*env;
-	t_env	*secret_env;
-	ssize_t	len;
-	t_token	*start;
-	int		ret;
-	int		exit;
+	char			*cmd;
+	char			*dir;
+	t_env			*env;
+	t_env			*secret_env;
+	ssize_t			len;
+	t_token			*start;
+	int				ret;
+	int				exit;
 	// int		pipe;
-	int		pipein;
-	int		pipeout;
-	int		pid;
-	int		charge;
-	int		left;
-	int		d_left;
-	int		right;
-	int		d_right;
-	int		fdin;
-	int		fdout;
-	int		in;
-	int		out;
-	int		parent;
-	int		last;
-	int		no_exec;
+	int				pipein;
+	int				pipeout;
+	int				pid;
+	int				charge;
+	int				left;
+	int				d_left;
+	int				right;
+	int				d_right;
+	int				fdin;
+	int				fdout;
+	int				in;
+	int				out;
+	int				parent;
+	int				last;
+	int				no_exec;
+	char			**history;
+	struct termios	orig_termios;
+	unsigned int	c_hist;
 }	t_meta;
 
 typedef struct s_cwd

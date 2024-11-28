@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+
+
 static char	*ft_alloc_with_spaces(char *line)
 {
 	int		i;
@@ -55,7 +57,7 @@ static int	ft_check_quotes(t_meta *minishell, char **line)
 {
 	if (ft_quotes(*line, INT_MAX))
 	{
-		ft_putendl_fd("MINISHELL: syntax error with open quotes", 2);
+		ft_putendl_fd("minishell: syntax error with open quotes", 2);
 		ft_memdel(*line);
 		minishell->ret = 2;
 		minishell->start = NULL;
@@ -66,8 +68,10 @@ static int	ft_check_quotes(t_meta *minishell, char **line)
 
 void	ft_parse_input(t_meta *minishell)
 {
-	char	*line;
-	t_token	*token;
+	char			*line;
+	t_token			*token;
+	
+	
 
 	signal(SIGINT, &ft_sig_int);
 	signal(SIGQUIT, &ft_sig_quit);
@@ -75,7 +79,7 @@ void	ft_parse_input(t_meta *minishell)
 		ft_putstr_fd("🔴 ", 2);
 	else
 		ft_putstr_fd("🟢 ", 2);
-	ft_putstr_fd("\033[0;36m\033[1mMINISHELL: \033[0m", 2);
+	ft_putstr_fd("\033[0;36m\033[1mminishell ▸ \033[0m", 2);
 	if (ft_get_next_line(0, &line) == -2)
 	{
 		minishell->exit = 1;
@@ -88,9 +92,11 @@ void	ft_parse_input(t_meta *minishell)
 	line = ft_proc_spaces(line);
 	if (line && line[0] == '$')
 		line[0] = (char)(-line[0]);
+	read_history(line);
 	minishell->start = ft_get_tokens(line);
 	ft_memdel(line);
 	ft_squish_args(minishell);
+	
 	token = minishell->start;
 	while (token)
 	{

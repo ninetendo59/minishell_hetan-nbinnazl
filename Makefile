@@ -1,5 +1,7 @@
+#refer https://github.com/cclaude42/minishell
+
 NAME		=	minishell
-CC			=	gcc
+CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -g
 HEADER 		=	inc
 BUILTINS	=	cd echo env exit export pwd unset
