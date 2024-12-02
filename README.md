@@ -1,2 +1,2 @@
-#  Read before upload repo
-Hi
+#  Minishell
+~~A hell project from 42~~
