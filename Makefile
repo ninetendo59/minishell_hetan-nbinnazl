@@ -1,5 +1,3 @@
-#refer https://github.com/cclaude42/minishell
-
 NAME		=	minishell
 CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -g
