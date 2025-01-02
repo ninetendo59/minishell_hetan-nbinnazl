@@ -83,17 +83,17 @@
 [@nizarsyahmi37](https://github.com/nizarsyahmi37) - Main contributor, bash interface designer
 [@ninetendo59](https://github.com/ninetendo59) - Create minishell "skeletal" structure, norminette checking, debugging completed code (fixing leaks, uninitialised value, refactor and restructure code), sanity testing.
 
-## What is the difference between Shell and Terminal?
+## 🤔 What is the difference between Shell and Terminal?
 
-### Terminal
+### 🖥️ Terminal
 - A window or interface that provides a space to execute commands via a shell.
 - Acts as a container for the shell to run.
 
-### Shell
+### 🐚 Shell
 - It is a command interpreter or environment where you execute commands.
 - Offers scripting, command history, and access to system features.
 
-## Choice of function for taking input
+## ⚖️ Choice of function for taking input
 
 <table>
   <tr>
@@ -134,10 +134,10 @@
 - In my opinion, using `readline()` is the easiest way to complete your minishell compared to `get_next_line()`.
 - If you are perfectionist, why not just go ahead to use `get_next_line()`?
 
-## Leak Check command
+## ⍼ Leak Check command
 `valgrind --leak-check=full ./minishell`
 
-## Further references
+## 📖 Further references
 <ol>
   <li>https://m4nnb3ll.medium.com/minishell-building-a-mini-bash-a-42-project-b55a10598218</li>
   <li>https://www.youtube.com/watch?v=yTR00r8vBH8</li>
